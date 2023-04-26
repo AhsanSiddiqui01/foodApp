@@ -1,0 +1,19 @@
+const actionTypes = {
+    USER_INFO: 'USER_INFO',
+    USER_INFO_Access_token: 'USER_INFO_Access_token',
+    PRODUCT_LIST:'PRODUCT_LIST',
+    PRODUCT_DETAIL:'PRODUCT_DETAIL',
+    ADD_TO_CART:'ADD_TO_CART',
+    USER_INFO_Access_token_signup: 'USER_INFO_Access_token_signup',
+    START_LOADING: 'START_LOADING',
+    CLOSE_LOADING: 'CLOSE_LOADING',
+    START_ACTIVITY_LOADING: 'START_ACTIVITY_LOADING',
+    CLOSE_ACTIVITY_LOADING: 'CLOSE_ACTIVITY_LOADING',
+    LOG_OUT: 'LOG_OUT',
+    CHECK_OUT:'CHECK_OUT',
+    GET_NOTIFICATION:'GET_NOTIFICATION',
+  
+  };
+  
+  export default actionTypes;
+  
