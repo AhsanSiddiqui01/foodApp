@@ -25,6 +25,11 @@ const getIcon = (routeName, isActive) => {
         ? tabIcons.HistoryActive
         : tabIcons.HistoryInactive;
     }
+    case 'TotalStack': {
+      return isActive
+        ? tabIcons.TotalActive
+        : tabIcons.TotalInactive;
+    }
   }
 };
 const renderButtons = (state, descriptors, navigation, position) => {
@@ -90,7 +95,7 @@ class Tab extends React.Component {
           blurAmount={20}
           reducedTransparencyFallbackColor="transparent"
         />
-        <View style={styles.buttonContainer}>
+        <View style={styles.buttonContainerTwo}>
           {renderButtons(state, descriptors, navigation, position)}
         </View>
       </Animated.View>

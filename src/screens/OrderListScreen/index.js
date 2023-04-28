@@ -76,17 +76,18 @@ function UserOrders(props) {
   }
   return (
     <View style={styles.container}>
-        <View style={styles.searhBar}>
+        {/* <View style={styles.searhBar}>
           <MainInput
             placeholder=" Search Item"
             style={styles.inputField}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </View>
+        </View> */}
         {!!posts && posts.length > 0 ?
         <FlatList
       data={posts}
       // renderItem={renderOrderList}
+      contentContainerStyle={{paddingBottom:35}}
       renderItem={({item}) => <UserOrderCart item={item}/>}
       keyExtractor={(item) => item.id}
     />

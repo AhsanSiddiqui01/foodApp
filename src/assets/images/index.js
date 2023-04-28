@@ -16,6 +16,8 @@ export const icons = {
     OrderInactive:   require('./tabIcons/OrderInactive.png'),
     HistoryActive:   require('./tabIcons/HistoryActive.png'),
     HistoryInactive: require('./tabIcons/HistoryInactive.png'),
+    TotalActive:     require('./tabIcons/TotalActive.png'),
+    TotalInactive:     require('./tabIcons/TotalInactive.png'),
 
     // powerActive: require('./tabIcons/powerActive.png'),
     // powerInactive: require('./tabIcons/powerInactive.png'),

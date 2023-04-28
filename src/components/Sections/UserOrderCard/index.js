@@ -66,24 +66,6 @@ console.log('checkkkk',mergedObject);
   
   return (
     <View>
-         {displayDate == todayDate? 
-         itemQty.map((item)=>
-    <View style={styles.orderByContainer}>
-        <View style={{flexDirection:"row",justifyContent:'space-between'}}>
-        <Text style={styles.orderTexttextField}>{item.name} - {item.QTY}</Text>
-        </View>
-    </View>
-         )
-    :
-    null }
-          {/* {displayDate == todayDate && totalQty ? 
-    <View style={styles.orderByContainer}>
-        <View style={{flexDirection:"row",justifyContent:'space-between'}}>
-        <Text style={styles.orderTexttextField}>{totalQty.itemDetail}</Text>
-        </View>
-    </View>
-    :
-    null } */}
     {displayDate == todayDate  ? 
         <View style={styles.orderByContainer}>
         <View style={{flexDirection:"row",justifyContent:'space-between'}}>

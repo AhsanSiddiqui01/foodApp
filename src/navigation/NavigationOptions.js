@@ -24,6 +24,7 @@ export const shouldHeaderBeShown = (activeRouteName) => {
     case 'MenuScreen':
     case 'History':
     case 'OrderList':
+    case 'TotalScreen':
       return true;
     default:
       return false;
@@ -41,7 +42,9 @@ export const getTitle = (activeRouteName) => {
     case 'ProductDetail':
       return 'Details';
     case 'OrderList':
-      return 'User Orders'
+      return 'User Orders';
+    case 'TotalScreen':
+        return 'Total Item'
     default:
       return 'No Heading';
   }
@@ -53,6 +56,7 @@ export const showHeaderRight = (activeRouteName, navigation, onBackPress) => {
     case 'OurProudct':
     case 'ProductDetail':
     case 'OrderList':
+    case 'TotalScreen':  
       return renderLogoutButton();
     default:
       return false;

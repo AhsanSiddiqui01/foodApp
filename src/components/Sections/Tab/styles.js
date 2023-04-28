@@ -42,6 +42,18 @@ const styles = StyleSheet.create({
     left: 0 * vw,
     backgroundColor: 'rgba(255,255,255,0.0)',
   },
+  buttonContainerTwo:{
+    alignItems: 'center',
+    justifyContent:'space-around',
+    flexDirection: 'row',
+    height: 7 * vh,
+    width: 90 * vw,
+    borderRadius: 0 * vw,
+    position: 'absolute',
+    bottom: 0 * vh,
+    left: 0 * vw,
+    backgroundColor: 'rgba(255,255,255,0.0)',
+  },
   tabButton: {
     height: 7 * vh,
     width: 30 * vw,
