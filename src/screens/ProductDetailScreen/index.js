@@ -14,21 +14,27 @@ import QuantityButton from '../../components/Buttons/QuantityButton';
 import { TextInput } from 'react-native-gesture-handler';
 function ProductDetails(props) {
   // console.log('checkkkingggg',props)
+
   let [QTY, setNum]= useState(1);
+  let[price,setPrice] = useState()
   let incNum =()=>{
     if(QTY<99)
     {
     setNum(Number(QTY)+1);
+    setPrice(ProductPrice * QTY)
     }
   };
   let decNum = () => {
      if(QTY>1)
      {
       setNum(QTY - 1);
+      console.log('checkprice',price)
+      setPrice(price - ProductPrice)
      }
   }
  let handleChange = (e)=>{
    setNum(e.target.value);
+   setPrice(e.target.value)
   }
     const navigation = useNavigation();
     const ProductImage = props.route.params.foodList.image;
@@ -45,15 +51,17 @@ function ProductDetails(props) {
         // console.log('PRODUCTDETAIL',data)
       },[])
     const addToCart = (props) => {
+      
       setNotes('')
       setNum('1')
+      setPrice()
       // const ItemId = props.cartDetail
       // console.log('addItemId', ItemId);
 
         const current = new Date();
         const currentHour = current.getHours();
         if( currentHour >= 9 && currentHour <=23 ){
-          dispatch({type:actionTypes.ADD_TO_CART,payload:data,notes,QTY})
+          dispatch({type:actionTypes.ADD_TO_CART,payload:data,price:ProductPrice * QTY,notes,QTY})
           // console.log('notessfindding',data)
           setTimeout(()=>{
             navigation.navigate('OurProudct')
@@ -66,12 +74,14 @@ function ProductDetails(props) {
       }
 
       const OrderRn = (props) => {
+        console.log('checkcccdcc',props)
         setNotes('')
         setNum('1')
+        setPrice()
           const current = new Date();
           const currentHour = current.getHours();
           if( currentHour >= 9 && currentHour <=23 ){
-            dispatch({type:actionTypes.ADD_TO_CART,payload:data,notes,QTY})
+            dispatch({type:actionTypes.ADD_TO_CART,payload:data,price:ProductPrice * QTY,notes,QTY})
             setTimeout(()=>{
               navigation.navigate('MenuScreen')
             },1000)
@@ -98,7 +108,14 @@ function ProductDetails(props) {
       <View style={styles.contentContainer}>
         {/* <Text style={styles.name}></Text> */}
         <Text style={styles.otherDetail}>{ProductName}</Text>
-        <Text style={styles.otherDetail}>Price :<Text style={styles.ProductDetail}>{ProductPrice}</Text></Text>
+  
+        <Text onChangeText={handleChange}  style={styles.otherDetail}>Price :
+      
+        <Text style={styles.ProductDetail}> {ProductPrice * QTY} Rs</Text>
+        
+        </Text>
+        
+   
         <Text style={styles.otherDetail}>Shop: <Text style={styles.ProductDetail}>{ProductDetail}</Text></Text>
         <View style={styles.qtyContainer}>
         <Text style={styles.otherDetail}>Quantity:</Text>

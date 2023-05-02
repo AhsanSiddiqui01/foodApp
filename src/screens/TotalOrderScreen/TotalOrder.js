@@ -8,35 +8,23 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { vh } from '../../utils/Units'
 function TotalOrders() {
   const [posts,setPosts] = useState([])
-  // const [refresh,setRefresh] = useState(false)
   const [finalData, setFinalData] = useState([])
-  // console.log('checkpoisstt',posts)
-    
-  // const pullMe = () => {
-  //   setRefresh(true)
-  //   setTimeout(() => {
-  //     setRefresh(false)
-  //   }, 1000);
-  // }
-
   var todayDate = new Date();
   var dd = todayDate.getDate();
   var mm = todayDate.getMonth()+1; 
   var twoDigitYear = new Date().getFullYear().toString().substr(-2)
   todayDate = mm+'/'+dd+'/'+twoDigitYear;
 
-  const itemList = posts
 
 
- var result = [];
-
-const checkTotal = async () => {
-    itemList.map(items => {
+  
+  var result = [];
+  const checkTotal = async (list) => {
+    list.map(items => {
         const single = items.userOrder
         console.log('singletime',single)
         const findDate = items.date
-        // var result = [];
-        {findDate == todayDate?
+        findDate == todayDate&&
           single.forEach(function (a) {
           if (!this[a.name]) {
               this[a.name] = { 
@@ -44,7 +32,7 @@ const checkTotal = async () => {
                             //   "description": a.description,
                               "name": a.name,
                               "QTY":0,
-                              "price": a.price,
+                              // "price": a.price,
                             //   "shop": a.shop,
                             //   "notes": a.notes,
                               "image": a.image 
@@ -53,33 +41,28 @@ const checkTotal = async () => {
           }
           this[a.name].QTY += a.QTY;
           this[a.name].image = a.image;
-          this[a.name].price = a.price;
+          // this[a.name].price = a.price;
         }, Object.create(null))
-        :
-        null
-        }
+        // setFinalData(result);
     })
-}
 
+}
 const FinalResult = () => {
   var resultF = [];
     result.forEach(function (a) {
         if (!this[a.name]) {
-            this[a.name] = { name: a.name, QTY: 0,image: a.image,price:a.price };
+            this[a.name] = { name: a.name, QTY: 0,image: a.image };
             resultF.push(this[a.name]);
         }
         this[a.name].QTY += a.QTY;
         this[a.name].image = a.image;
-        this[a.name].price = a.price;
     }, Object.create(null));
          console.log('otherreust',resultF)
          setFinalData(resultF);
 }
   useEffect(()=>{
-    checkTotal()
-    FinalResult()
     getUserOrder()
-        },[FinalResult]) 
+        },[]) 
   
   const getUserOrder = async () => {
   
@@ -98,6 +81,8 @@ const FinalResult = () => {
        })
      })
      setPosts(list)
+     checkTotal(list)
+     FinalResult(result)
    }) 
        
      }
@@ -114,8 +99,6 @@ const FinalResult = () => {
             <Text style={styles.listHeading}>Quantity</Text>
           </View>
         </View>
-    
-    {/* <ScrollView  contentContainerStyle={{paddingBottom:16 * vh}} refreshControl={<RefreshControl refreshing={refresh} onRefresh={()=>pullMe()}/>}>  */}
     <ScrollView  contentContainerStyle={{paddingBottom:16 * vh}}>
     {finalData.length === 0
         ? null

@@ -87,10 +87,10 @@ case actionTypes.ADD_TO_CART:
     cart: inCart
       ? state.cart.map((item) =>
           item.id === action.payload.id
-            ? { ...action.payload, QTY: action.QTY, notes:action.notes }
+            ? { ...action.payload, price:action.price,QTY: action.QTY, notes:action.notes }
             : item,
         )
-      : [...state.cart, { ...action.payload, QTY: action.QTY, notes:action.notes  }],
+      : [...state.cart, { ...action.payload,price:action.price, QTY: action.QTY, notes:action.notes  }],
 
       // ...state,
       // cart:[
