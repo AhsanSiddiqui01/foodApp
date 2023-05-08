@@ -39,9 +39,10 @@ function MyOrders(props) {
   querySnapShot.forEach(doc => {
     console.log("documenttsss",doc)
     const detailsss = doc.data().orderDetail
-    const {time,date,userId,userName,userOrder}  = detailsss
+    const {time,date,userId,userName,userOrder,totalPrice}  = detailsss
     console.log('cheddddd',detailsss)
     list.push({
+      totalPrice,
       time,
       date,
       userName,

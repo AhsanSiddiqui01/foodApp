@@ -44,6 +44,17 @@ const styles = StyleSheet.create({
       {
         width:15,
         height:15
+      },
+      TotalAmount:{
+        height:30,
+        justifyContent:'center',
+        alignItems:'center',
+        fontWeight:'bold',
+      },
+      TotalAmtSize:
+      {
+        fontSize:20,
+        color:ThemeColors.darkBlue
       }
 
 })

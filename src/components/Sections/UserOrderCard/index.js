@@ -4,10 +4,11 @@ import styles from './styles';
 export default function UserOrderCart (props) {
   
   const {item} = props
-  const unameOrders = item.userName
+  const unameOrders    = item.userName
   const displayDate    = item.date
   const displayTIme    = item.time
   const itemQty        = item.userOrder
+  const displayAmount  = item.totalPrice
 
   
 
@@ -72,8 +73,9 @@ console.log('checkkkk',mergedObject);
         <Text style={styles.orderTexttextField}>Order By: {unameOrders}</Text>
         <Text style={styles.orderTexttextField}>Date:   {displayDate}</Text>
         </View>
-        <Text style={styles.orderTexttextField}>Time:   {displayTIme}</Text>
         <View style={{flex:2,flexDirection:"row",justifyContent:'space-between'}}>
+        <Text style={styles.orderTexttextField}>Time:   {displayTIme}</Text>
+        <Text style={styles.orderTexttextField}>Amount:   {displayAmount} Rs.</Text>
         </View>
     </View>
     :

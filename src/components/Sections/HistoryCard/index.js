@@ -18,6 +18,7 @@ function HistoryCart (props) {
     // const unameOrders = item.userName
     const displayDate    = item.date
     const displayTIme    = item.time
+    const TotalAmount    = item.totalPrice
     const fireStoreUid   = item.userId
     const checkID        = props.id
     // console.log('userIddd',displayTIme)
@@ -29,6 +30,9 @@ function HistoryCart (props) {
                 <View style={{flexDirection:"row",justifyContent:'space-between'}}>
                   <Text style={styles.orderTexttextField}>Date:   {displayDate}</Text>
                   <Text style={styles.orderTexttextField}>Time:   {displayTIme}</Text>
+                </View>
+                <View style={{justifyContent:'center',alignItems:'center',marginTop:10}}>
+                <Text style={{color:'white'}}>Your Order Amount: {TotalAmount} Rs</Text>
                 </View>
             </View>
       :

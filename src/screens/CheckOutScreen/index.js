@@ -16,10 +16,33 @@ import notificationService from './notificationService';
 import notifee,{AndroidStyle} from '@notifee/react-native'
 import firestore from '@react-native-firebase/firestore'
 import { icons } from '../../assets/images';
+import ThemeColors from '../../utils/ThemeColors';
+import PoppinsRegular from '../../components/Text/PoppinsRegular';
 
 function Cart(props) {
 
-  // console.log('checkDate',{setDate,setTime})
+  const sum = props.cart
+
+  var result = [];
+  sum.forEach(function (items) {
+  if (!this[items.name]) {
+      this[items.name] = { 
+            "price": items.price,
+          };
+            result.push(this[items.name]);
+          }
+            this[items.name].price = items.price;
+          }, Object.create(null))
+      
+        
+        let TotalPrice = 0;
+        
+        result.forEach(element => {
+          TotalPrice += element.price;
+        });
+        
+        console.log('teststst',TotalPrice);
+        
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
@@ -69,6 +92,7 @@ function Cart(props) {
         token:token,
         apcontrol:props.apcontrol
       })
+      checkTotal()
       console.log('token=>>>',{token:token,apcontrol:props.apcontrol})
     })
   }
@@ -112,6 +136,7 @@ function Cart(props) {
       setData(checkVal);
     };
   const _renderItem = ({item,index}) =>  {
+    
     return(
      <OrderCart
      data={item}
@@ -135,6 +160,7 @@ function Cart(props) {
         const orderDetail = {
           userName:props.props.name,
           userId:props.props.id,
+          totalPrice:TotalPrice,
           userOrder:props.item,
           date:todayDate,
           time:new Date().toLocaleTimeString()
@@ -184,9 +210,18 @@ function Cart(props) {
         }}
         >
         <Image source={icons.previous} style={styles.backArrowSize}/>
+        
         </TouchableOpacity>
-      {!!orderList && !!orderList.cart && orderList.cart.length > 0
+        {!!orderList && !!orderList.cart && orderList.cart.length > 0
       ?
+      <View>
+          <View style={styles.TotalAmount}>
+            <Text style={styles.TotalAmtSize}>
+              Total Amount: {TotalPrice} Rs
+            </Text>
+          </View>
+      
+     
       <FlatList 
       data={orderList.cart}
       contentContainerStyle={{ paddingBottom: 70 }}
@@ -215,6 +250,7 @@ function Cart(props) {
         />
       }
       />
+       </View>
       :
       <View style={styles.noDataView}>
         <Image source={icons.emptyBaskey} style={styles.hungryIcon}/>
