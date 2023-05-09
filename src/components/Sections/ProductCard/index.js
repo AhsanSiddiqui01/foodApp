@@ -17,7 +17,7 @@ const ProductCard = (props) => {
   const navigation = useNavigation();
   return ( 
   <TouchableOpacity
-      style={[styles.container]}
+      style={[styles.container,props.style]}
       // style={[styles.container,{backgroundColor: randomColor()}]}
       onPress={()=>{
         navigation.navigate('ProductDetail',{

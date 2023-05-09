@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         elevation: 10,
         padding: 3 * vw,
         flexDirection:'row',
-        backgroundColor: 'white',
+        backgroundColor: ThemeColors.darkBlue,
         marginHorizontal: 4 * vw,
         marginTop: 2 * vh,
         marginBottom: 1 * vh,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     name:{
         fontSize:12,
         fontWeight:'700',
-        color:'white',
+        color:ThemeColors.white,
         marginLeft:10,
         width:125,
         flexDirection:'row'

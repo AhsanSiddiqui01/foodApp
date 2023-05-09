@@ -18,6 +18,7 @@ import firestore from '@react-native-firebase/firestore'
 import { icons } from '../../assets/images';
 import ThemeColors from '../../utils/ThemeColors';
 import PoppinsRegular from '../../components/Text/PoppinsRegular';
+import { vh } from '../../utils/Units';
 
 function Cart(props) {
 
@@ -224,7 +225,7 @@ function Cart(props) {
      
       <FlatList 
       data={orderList.cart}
-      contentContainerStyle={{ paddingBottom: 70 }}
+      contentContainerStyle={{ paddingBottom: 18*vh }}
       renderItem={_renderItem}
       keyExtractor={(item) => item.id}
       ListFooterComponent={

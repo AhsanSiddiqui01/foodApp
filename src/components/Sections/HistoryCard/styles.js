@@ -6,7 +6,7 @@ const { default: ThemeColors } = require("../../../utils/ThemeColors");
 const styles = StyleSheet.create({
     mainContainer: {
         width: 92 * vw,
-        elevation: 10,
+        elevation: 3,
         padding: 3 * vw,
         flexDirection:'row',
         backgroundColor: 'white',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     name:{
         fontSize:12,
         fontWeight:'700',
-        color:'white',
+        color:'black',
         marginLeft:10,
         width:125,
         flexDirection:'row'

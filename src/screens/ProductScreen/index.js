@@ -5,7 +5,7 @@ import ProductCard from '../../components/Sections/ProductCard';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { vh,vw } from '../../utils/Units';
-import MainInput from '../../components/Input/MainInput';
+import SearchInput from '../../components/Input/SearchInput';
 class ProductList extends Component {
   constructor(props) {
     super(props);
@@ -48,8 +48,10 @@ class ProductList extends Component {
       let data = {
         keyword: this.state.keyword,
       };
-
-      const search = await this.props.getProductLists(data.keyword, success => { }, error => { });
+      setTimeout(async ()=>{
+        // navigation.navigate('OurProudct')
+        await this.props.getProductLists(data.keyword, success => { }, error => { });
+      },2800)
     } catch (error) {
       showToast(error);
     }
@@ -61,22 +63,20 @@ class ProductList extends Component {
     var item = this.props.all_product_list
     return (
       <View style={styles.container}>
-        <View style={styles.searhBar}>
-          <MainInput
-            placeholder=" Search Item"
-            style={styles.inputField}
+          <SearchInput
+            placeholder=" Search"
             onChangeText={(keyword) => this.onStateChange('keyword', keyword)}
           />
-        </View>
   <FlatList 
   showsVerticalScrollIndicator={false}
+  style={{width:92*vw}}
   data={item}
   renderItem={this._renderProductList}
   // showsVerticalScrollIndicator={false}
   // horizontal={true}
   numColumns={2}
   keyExtractor={item=>item.id}
-  contentContainerStyle={{paddingBottom:10*vh}}
+  contentContainerStyle={{paddingBottom:10*vh,paddingTop:2*vh}}
   />
       </View>
     );

@@ -29,7 +29,7 @@ export default function OrderCart (props) {
     // };
   return (
     <TouchableOpacity 
-    style={[styles.mainContainer,{backgroundColor: randomColor()}]}
+    style={styles.mainContainer}
     // style={styles.mainContainer}
     activeOpacity={.6}
     >

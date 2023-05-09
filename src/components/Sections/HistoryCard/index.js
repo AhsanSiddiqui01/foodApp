@@ -42,7 +42,7 @@ function HistoryCart (props) {
       ? 
         item.userOrder.map((item)=>
         <TouchableOpacity 
-        style={[styles.mainContainer,{backgroundColor: randomColor()}]}
+        style={styles.mainContainer}
         // style={styles.mainContainer}
         activeOpacity={1}
         >

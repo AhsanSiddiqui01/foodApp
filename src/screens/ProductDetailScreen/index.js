@@ -12,6 +12,8 @@ import { icons } from '../../assets/images';
 import OrderButton from '../../components/Buttons/OrderButton';
 import QuantityButton from '../../components/Buttons/QuantityButton';
 import { TextInput } from 'react-native-gesture-handler';
+import { CommonActions } from '@react-navigation/native';
+
 function ProductDetails(props) {
   // console.log('checkkkingggg',props)
 
@@ -80,11 +82,20 @@ function ProductDetails(props) {
         setPrice()
           const current = new Date();
           const currentHour = current.getHours();
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                { name: 'OurProudct' },
+              ],
+            })
+          );
           if( currentHour >= 9 && currentHour <=23 ){
             dispatch({type:actionTypes.ADD_TO_CART,payload:data,price:ProductPrice * QTY,notes,QTY})
+         
             setTimeout(()=>{
               navigation.navigate('MenuScreen')
-            },1000)
+            },)
           }
           else{
             return showToast("You can't place order right now");

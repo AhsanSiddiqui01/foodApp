@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
 
     },
     imgContainer: {
-        height: 30 * vw, width: 36 * vw, borderRadius: 1 * vw
+        height: 30 * vw, 
+        width: 36 * vw, 
+        borderRadius: 1 * vw
     },
     container2: {
         marginTop: 2 * vh, marginLeft: 3 * vw, width: 70 * vw,
