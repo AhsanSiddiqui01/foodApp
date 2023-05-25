@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, ScrollView, View } from 'react-native';
 import styles from './styles';
 import ProductCard from '../../components/Sections/ProductCard';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { vh,vw } from '../../utils/Units';
 import SearchInput from '../../components/Input/SearchInput';
+import Banner from '../../components/ImageCarousel/Banner';
 class ProductList extends Component {
   constructor(props) {
     super(props);
@@ -67,6 +68,8 @@ class ProductList extends Component {
             placeholder=" Search"
             onChangeText={(keyword) => this.onStateChange('keyword', keyword)}
           />
+          <ScrollView>
+          <Banner/>
   <FlatList 
   showsVerticalScrollIndicator={false}
   style={{width:92*vw}}
@@ -78,6 +81,7 @@ class ProductList extends Component {
   keyExtractor={item=>item.id}
   contentContainerStyle={{paddingBottom:10*vh,paddingTop:2*vh}}
   />
+  </ScrollView>
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import {Image, TouchableOpacity,Alert,Text} from 'react-native';
+import {Image, TouchableOpacity,View,Text} from 'react-native';
 import PoppinsRegular from '../../Text/PoppinsRegular';
 import styles from './styles'
 import { useNavigation } from '@react-navigation/native';
@@ -30,13 +30,18 @@ const ProductCard = (props) => {
         style={styles.imgContainer}
         source={{uri: props.foodList?.item.image}}
       />
-
+        <View style={{flexDirection:"row",justifyContent:'space-between'}}>
         <PoppinsRegular
           style={styles.circularBoardStyle}
           numberOfLines={1}>
          {props.foodList.item.name}
         </PoppinsRegular>
-      
+       <PoppinsRegular
+          style={styles.priceText}
+          numberOfLines={1}>
+         {props.foodList.item.price} Rs
+        </PoppinsRegular>
+        </View>
     </TouchableOpacity>
   );
 };

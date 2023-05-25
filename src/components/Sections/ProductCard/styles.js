@@ -34,9 +34,16 @@ const styles = StyleSheet.create({
     },
     circularBoardStyle: {
         color: ThemeColors.fontBlack,
-        fontSize: 4 * vw,
+        fontSize: 3 * vw,
         marginLeft:1*vw,
         fontWeight:"bold"
+    },
+    priceText: {
+        color: ThemeColors.darkBlue,
+        fontSize: 3* vw,
+        marginLeft:1*vw,
+        fontWeight:"bold",
+        // marginTop:vh - 2
     },
     heading: {
         color: ThemeColors.backgroundBlack,

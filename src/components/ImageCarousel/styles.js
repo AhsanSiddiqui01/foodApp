@@ -23,21 +23,23 @@ const styles = StyleSheet.create({
         height:140,
         // aspectRatio:1
     },
-    // container2: {
-    //     marginTop: 2 * vh, marginLeft: 3 * vw, width: 70 * vw,
-    // },
-    // circularBoardStyle: {
-    //     color: ThemeColors.fontBlack,
-    //     fontSize: 4 * vw,
-    //     marginLeft:1*vw,
-    //     fontWeight:"bold"
-    // },
-    // heading: {
-    //     color: ThemeColors.backgroundBlack,
-    //     fontSize: 2.3 * vw,
-    //     marginBottom: 0.5 * vh,
-    //     fontWeight:"bold"
-    // }
+    bannerContainer:{
+        flex:1,
+        // backgroundColor:'gainsboro'
+    },
+    swiper:{
+        width:vw*90,
+        height:vh*25,
+        // alignItems:'center',
+        marginTop:5,
+        // backgroundColor:'red'
+    },
+    imageBanner:{
+        height:vh*25,
+        width:vw*80,
+        borderRadius:10,
+        marginHorizontal:20
+    }
 
 })
 export default styles;
