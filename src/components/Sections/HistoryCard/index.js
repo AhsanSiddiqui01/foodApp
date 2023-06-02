@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { icons } from '../../../assets/images';
 
 function HistoryCart (props) {
-  console.log('userOrderDDSS')
+  console.log('userOrderDDSS',props)
    
-  const {item,onPress} = props
-  // console.log('checkkdataaa',item)
+  const {item,onPress,data} = props
+  console.log('checkkdataaa',item)
     const randomColor = () => {
         const red   = Math.floor(Math.random() * 230)
         const blue  = Math.floor(Math.random() * 200)
@@ -22,6 +22,27 @@ function HistoryCart (props) {
     const fireStoreUid   = item.userId
     const checkID        = props.id
     // console.log('userIddd',displayTIme)
+    
+    // const coldDrink = data.drinks
+    // const orderDrinks = coldDrink.map((items)=>{
+    //   return( 
+
+    //       <View key={items.id}>
+    //         <Text style={styles.drinksandNotes}>Drinks:
+    //       {items.drink1.quantity == '0' ? null : <Text>{items.drink1.name} ({items.drink1.quantity}) </Text>}
+    //       {items.drink2.quantity == '0' ? null : <Text>{items.drink2.name} ({items.drink2.quantity}) </Text>}
+    //       {items.drink3.quantity == '0' ? null : <Text>{items.drink3.name} ({items.drink3.quantity}) </Text>}
+    //       {items.drink4.quantity == '0' ? null : <Text>{items.drink4.name} ({items.drink4.quantity}) </Text>}
+          
+    //       {items.drink1.quantity == '0' && items.drink2.quantity == '0' &&
+    //        items.drink3.quantity == '0' && items.drink4.quantity == '0'
+    //        ? <Text> No Drinks</Text> : null}
+    //       </Text>
+    //       </View>
+    //     )
+     
+    // });
+
   return (
     <View>
       {checkID == fireStoreUid && (item.userOrder) 
@@ -41,11 +62,12 @@ function HistoryCart (props) {
         {checkID == fireStoreUid  && (item.userOrder)  
       ? 
         item.userOrder.map((item)=>
-        <TouchableOpacity 
-        style={styles.mainContainer}
-        // style={styles.mainContainer}
-        activeOpacity={1}
+        <View 
+        style={styles.container}
         >
+     <View 
+    style={styles.card}
+    >
         <View style={styles.productImageView}>
          <Image
           resizeMode='cover'
@@ -61,14 +83,31 @@ function HistoryCart (props) {
         :
         <Text style={styles.name}>QTY: 1</Text>
         }
+     
+        </View> 
+        </View>
+        <View style={styles.drinksandNotesContainer}>
         {
+            item.drink1.quantity == 0 && item.drink2.quantity == 0 && item.drink3.quantity == 0 && item.drink4.quantity == 0 ? 
+            <Text style={styles.drinksandNotes}>Drinks: No Drinks
+            </Text>
+            :
+            <Text style={styles.drinksandNotes}>Drinks: 
+             {item.drink1.name}({item.drink1.quantity}) <></>
+             {item.drink2.name}({item.drink2.quantity}) <></>
+             {item.drink3.name}({item.drink3.quantity}) <></>
+             {item.drink4.name}({item.drink4.quantity}) <></>
+            </Text>
+            
+            }
+             {
           item.notes != ''?
-          <Text style={styles.name} numberOfLines={1}>Notes: {item.notes}</Text>
+          <Text style={styles.drinksandNotes} numberOfLines={1}>Notes: {item.notes}</Text>
           :
-          <Text style={styles.name}>Notes: No note</Text>
+          <Text style={styles.drinksandNotes}>Notes: No note</Text>
         }
         
-        </View> 
+        </View>
         {/* <TouchableOpacity onPress={onPress}>
           <Image
           source={require('../../../assets/images/icons/remove.png')}
@@ -89,7 +128,7 @@ function HistoryCart (props) {
             }
         
           </TouchableOpacity> */}
-        </TouchableOpacity>
+        </View>
         )
         : 
         <></>

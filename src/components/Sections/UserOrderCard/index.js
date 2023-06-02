@@ -112,12 +112,27 @@ console.log('checkkkk',mergedObject);
         </View> 
       
         </TouchableOpacity>
+        <View style={styles.drinksandNotesContainer}>
+        {
+            item.drink1.quantity == 0 && item.drink2.quantity == 0 && item.drink3.quantity == 0 && item.drink4.quantity == 0 ? 
+            <Text style={styles.drinksandNotes}>Drinks: No Drinks
+            </Text>
+            :
+            <Text style={styles.drinksandNotes}>Drinks: 
+             {item.drink1.name}({item.drink1.quantity}) <></>
+             {item.drink2.name}({item.drink2.quantity}) <></>
+             {item.drink3.name}({item.drink3.quantity}) <></>
+             {item.drink4.name}({item.drink4.quantity}) <></>
+            </Text>
+            
+            }
         {
           item.notes != ''?
-         <Text style={{color:'red'}}>Notes: <Text style={styles.textFieldNotes} numberOfLines={1}>{item.notes}</Text></Text> 
+         <Text style={{color:'red'}}>Notes: <Text style={styles.drinksandNotes} numberOfLines={1}>{item.notes}</Text></Text> 
           :
-        <Text style={{color:'red'}}>Notes: <Text style={styles.textFieldNotes}>No note</Text></Text>
+        <Text style={{color:'red'}}>Notes: <Text style={styles.drinksandNotes}>No note</Text></Text>
         }
+        </View>
         </View>
         )
         : 

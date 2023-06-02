@@ -4,16 +4,15 @@ const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        width: 92 * vw,
-        elevation: 3,
-        padding: 3 * vw,
-        flexDirection:'row',
+    container:{
         backgroundColor: 'white',
+        padding: 3 * vw,
+        elevation: 10,
         marginHorizontal: 4 * vw,
-        // marginTop: 2 * vh,
+        marginTop: 2 * vh,
         marginBottom: 1 * vh,
         borderRadius: 2 * vw,
+          
         shadowColor: '#000',
         shadowOffset: {
             width: 5,
@@ -21,10 +20,12 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 15,
-
+    },
+    card: {
+        flexDirection:'row',
     },
     imgContainer: {
-        height: 75, width: 75, borderRadius: 1 * vw
+        height: 60, width: 60, borderRadius: 1 * vw
     },
     container2: {
         // marginTop: 2 * vh,
@@ -82,6 +83,15 @@ const styles = StyleSheet.create({
     orderTexttextField:{
         color:'white',
     },
+    drinksandNotesContainer:{
+        marginTop:4,
+    },
+    drinksandNotes:
+    {
+        fontSize:12,
+        fontWeight:'700',
+        color:ThemeColors.fontBlack,
+    }
 
 })
 export default styles;

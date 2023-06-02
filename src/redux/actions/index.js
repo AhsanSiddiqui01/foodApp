@@ -93,6 +93,28 @@ const actions = {
     };
   },
 
+    //get sub list data
+    getSubLists: () => {
+      return (dispatch) => {
+        dispatch({ type: actionTypes.START_LOADING });
+        Api.get(
+          `subList.php`,
+          (success) => {
+            console.log('subList', success)
+            dispatch({
+              type: actionTypes.SUB_LIST,
+              payload: success.subList,
+            });
+  
+            dispatch({ type: actionTypes.CLOSE_LOADING });
+          },
+          (error) => {
+            dispatch({ type: actionTypes.CLOSE_LOADING });
+          },
+        );
+      };
+    },
+
    //get product detail
   //  getProductDetail: () => {
   //   return (dispatch) => {

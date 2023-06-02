@@ -105,13 +105,14 @@ const styles = StyleSheet.create({
         width:'100%',
         flexDirection:'row'
     },
-    textFieldNotes:{
+    drinksandNotesContainer:{
+        marginTop:4,
+    },
+    drinksandNotes:
+    {
         fontSize:12,
         fontWeight:'700',
-        color:'black',
-        marginLeft:10,
-        // width:200,
-        // flexDirection:'row'
+        color:ThemeColors.fontBlack,
     },
     textArea:
     {

@@ -12,6 +12,7 @@ const actionTypes = {
     LOG_OUT: 'LOG_OUT',
     CHECK_OUT:'CHECK_OUT',
     GET_NOTIFICATION:'GET_NOTIFICATION',
+    SUB_LIST:'SUB_LIST',
   
   };
   

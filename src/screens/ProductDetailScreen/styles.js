@@ -34,8 +34,10 @@ const styles = StyleSheet.create({
       fontSize:18,
       fontWeight:'700',
       flexDirection:'row',
-      width:200,
-      marginTop:6
+      // width:200,
+      marginTop:6,
+      // backgroundColor:'orange',
+      justifyContent:'space-between'
       // padding:20
     },
     Qtyfield: {
@@ -61,8 +63,14 @@ const styles = StyleSheet.create({
     otherDetail:{
       fontSize:18,
       fontWeight:'700',
-      // color:'red'
+      // color:'red',
       color:ThemeColors.fontDarkGrey
+    },
+    priceTotal: {
+      // alignSelf:'flex-end',
+      fontSize: 18,
+      // justifyContent:'flex-end',
+      // backgroundColor:'red',
     },
     qtyText:{
       alignItems:'center',
@@ -95,15 +103,15 @@ const styles = StyleSheet.create({
         backgroundColor:ThemeColors.addCartBtn
       },
       incrementBtn:{
-        marginLeft:8,
-        marginRight:8,
+        // marginLeft:8,
+        marginRight:-20,
         width:30,
         height:25,
-        alignSelf:'center',
+        // alignSelf:'center',
         backgroundColor:ThemeColors.incrementBtn,
       },
       decrementBtn:{
-        marginLeft:8,
+        marginLeft:-20,
         width:30,
         height:25,
         alignSelf:'center',
@@ -129,6 +137,32 @@ const styles = StyleSheet.create({
     {
       width:15,
       height:15
+    },
+    drinkMainContainer:{
+        marginTop:20,
+        backgroundColor:ThemeColors.white,
+        borderRadius:10,
+        elevation: 4,
+        marginBottom:10
+    },
+    drinkContainer:{
+        padding: 3 * vw,
+        flexDirection:"row",
+    },
+    checkBox:{
+      width:'12%'
+   
+    },
+    drinkName:{
+      width:'58%',
+      alignSelf:'center',
+      flexDirection:'row'
+    },
+    drinkQuantity:{
+      width:'30%',
+      flexDirection:'row',
+      justifyContent:'space-between',
+      alignSelf:'center',
     }
   
   })

@@ -17,7 +17,6 @@ const Banner = () => {
     },[])
 
 return(
-    <ScrollView>
     <View style={styles.bannerContainer}>
         <View style={styles.swiper}>
             <Swiper
@@ -39,7 +38,6 @@ return(
             </Swiper>
         </View>
     </View>
-    </ScrollView>
 )
 }
 export default Banner

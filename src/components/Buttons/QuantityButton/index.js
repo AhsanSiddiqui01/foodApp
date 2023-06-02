@@ -3,7 +3,7 @@ import { View, Text,TouchableOpacity,StyleSheet } from 'react-native';
 export default function QuantityButton(props) {
     const {title,onPress,mainContainerStyle} = props
   return (
-    <TouchableOpacity style={[styles.addToCartButton,mainContainerStyle]} activeOpacity={.6} onPress={onPress}>
+    <TouchableOpacity style={[styles.addToCartButton,mainContainerStyle]} activeOpacity={.6} onPress={onPress} disabled={props.disabled} >
         <Text style={styles.addToCartText}>{title}</Text>
     </TouchableOpacity>
   );

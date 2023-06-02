@@ -10,7 +10,7 @@ import styles from './styles'
 import MainInput from '../../components/Input/MainInput'
 function UserOrders(props) {
   const [posts,setPosts] = useState([])
-  console.log('checckkkk',props)
+  console.log('checckkkk',posts)
   const [arrayList,setArrayList] = useState([])
   useEffect(()=>{
     getUserOrder()

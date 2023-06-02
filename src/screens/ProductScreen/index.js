@@ -68,9 +68,12 @@ class ProductList extends Component {
             placeholder=" Search"
             onChangeText={(keyword) => this.onStateChange('keyword', keyword)}
           />
-          <ScrollView>
-          <Banner/>
   <FlatList 
+  ListHeaderComponent={
+    <>
+    <Banner/>
+    </>
+  }
   showsVerticalScrollIndicator={false}
   style={{width:92*vw}}
   data={item}
@@ -81,7 +84,6 @@ class ProductList extends Component {
   keyExtractor={item=>item.id}
   contentContainerStyle={{paddingBottom:10*vh,paddingTop:2*vh}}
   />
-  </ScrollView>
       </View>
     );
   }
