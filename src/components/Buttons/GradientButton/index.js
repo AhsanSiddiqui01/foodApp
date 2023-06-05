@@ -32,7 +32,7 @@ class GradientButton extends Component {
             style={[styles.buttonContainer, this.props.style]}
             onPress={this.onPressHandler}
             >
-                <LinearGradient colors={['#1458c4', '#1458c4']} style={styles.grad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+                <LinearGradient colors={['#004e92', '#457fca']} style={styles.grad} start={{ x: 1, y: 1 }} end={{ x: 1, y: 0 }}>
                     {(this.props.globalLoading === true || this.props.loading === true) ? <ActivityIndicator size='small' color={ThemeColors.white} /> : <PoppinsMedium style={[styles.text, this.props.titleStyle]}>
                         {this.props.title}
                     </PoppinsMedium>}

@@ -5,13 +5,14 @@ import HistoryCart from '../../components/Sections/HistoryCard';
 import firestore from '@react-native-firebase/firestore'
 import styles from './styles';
 import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import ThemeColors from '../../utils/ThemeColors';
 import { icons } from '../../assets/images';
 
 function MyOrders(props) {
   const [posts,setPosts] = useState([])
   console.log('chekccprssss',props)
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const [arrayList,setArrayList] = useState([])
   const cartData = useSelector(state=>state)
   useEffect(()=>{
@@ -83,6 +84,17 @@ function MyOrders(props) {
   // };
   return (
       <View style={styles.mainContainer}>
+        <TouchableOpacity style={styles.backArrow}
+          activeOpacity={.9}
+          onPress={()=>{
+          navigation.navigate('OurProudct',{
+            all_product_list:props.all_product_list
+          })
+        }}
+        >
+        <Image source={icons.previous} style={styles.backArrowSize}/>
+        
+        </TouchableOpacity>
          <FlatList
           data={posts}
           renderItem={({item}) => 

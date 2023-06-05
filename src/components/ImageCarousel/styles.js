@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
         width:vw*90,
         height:vh*25,
         // alignItems:'center',
-        marginTop:5,
+        // marginTop:5,
+        marginBottom:15
         // backgroundColor:'red'
     },
     imageBanner:{

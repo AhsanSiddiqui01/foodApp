@@ -23,23 +23,23 @@ import { vh } from '../../utils/Units';
 function Cart(props) {
 
   const sum = props.cart
-
+console.log('checktotal',sum)
   var result = [];
   sum.forEach(function (items) {
   if (!this[items.name]) {
       this[items.name] = { 
-            "price": items.price,
+            "price": items.totalPrice,
           };
             result.push(this[items.name]);
           }
-            this[items.name].price = items.price;
+            this[items.name].totalPrice = items.totalPrice;
           }, Object.create(null))
       
         
         let TotalPrice = 0;
         
         result.forEach(element => {
-          TotalPrice += element.price;
+          TotalPrice += element.totalPrice;
         });
         
         console.log('teststst',TotalPrice);
@@ -218,7 +218,7 @@ function Cart(props) {
       <View>
           <View style={styles.TotalAmount}>
             <Text style={styles.TotalAmtSize}>
-              Total Amount: {TotalPrice} Rs
+              Sub Total: {TotalPrice} Rs
             </Text>
           </View>
       
@@ -254,9 +254,19 @@ function Cart(props) {
        </View>
       :
       <View style={styles.noDataView}>
+        <TouchableOpacity 
+          activeOpacity={.9}
+          onPress={()=>{
+          navigation.navigate('OurProudct',{
+            all_product_list:props.all_product_list
+          })
+        }}
+        >
         <Image source={icons.emptyBaskey} style={styles.hungryIcon}/>
+        </TouchableOpacity>
         <Text style={styles.hungryText}>Hungry?</Text>
         <Text style={styles.emptyText}>You haven't selected anything yet!</Text>
+ 
       </View>
       } 
      

@@ -1,13 +1,15 @@
 
 import React from 'react'
-import { View, Text,RefreshControl,Image } from 'react-native'
+import { View, Text,RefreshControl,Image, TouchableOpacity } from 'react-native'
 import { useEffect,useState } from 'react'
 import firestore from '@react-native-firebase/firestore'
 import styles from './styles'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useNavigation } from '@react-navigation/native';
 import { vh } from '../../utils/Units'
+import { icons } from '../../assets/images'
 function TotalOrders(props) {
-
+  const navigation = useNavigation();
   const [posts,setPosts] = useState([])
   const [finalData, setFinalData] = useState([])
   var todayDate = new Date();
@@ -209,7 +211,19 @@ const FinalResult = () => {
      
   return (
     <View> 
+          <TouchableOpacity style={styles.backArrow}
+          activeOpacity={.9}
+          onPress={()=>{
+          navigation.navigate('OrderList',{
+            all_product_list:props.all_product_list
+          })
+        }}
+        >
+        <Image source={icons.previous} style={styles.backArrowSize}/>
+        
+        </TouchableOpacity>
         <View style={styles.container}> 
+    
           <View style={styles.headingStyle}>
             <Text style={styles.listHeading}>Food</Text>
           </View>

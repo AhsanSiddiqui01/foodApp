@@ -57,6 +57,8 @@ export const showHeaderRight = (activeRouteName, navigation, onBackPress) => {
     case 'ProductDetail':
     case 'OrderList':
     case 'TotalScreen':  
+    case 'MenuScreen':
+    case 'History':
       return renderLogoutButton();
     default:
       return false;

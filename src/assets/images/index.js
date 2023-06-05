@@ -1,6 +1,7 @@
 export const icons = {
     previous: require('./icons/previous.png'),
     hidePasswordGrey: require('./icons/hidePasswordGrey.png'),
+    showPasswordGrey: require('./icons/showPasswordGrey.png'),
     logout: require('./icons/power.png'),
     loadingIcon: require('./icons/fast-food.png'),
     coolIcon: require('./icons/cool.png'),
@@ -24,6 +25,6 @@ export const icons = {
 
   };
   export const TitleImages = {
-    Logo : require('./TitleImages/logo.png')
+    Logo : require('./TitleImages/logo.jpg')
   };
   

@@ -63,13 +63,15 @@ export default function OrderCart (props) {
         />
         </View>
         <View>
-        <Text style={styles.name}>{data.name}</Text>
-        <Text style={styles.name}>Price: {data.price}</Text>
+        <Text style={styles.name}>{data.name} ({data.price})</Text>
         {props.data.QTY != '' ? 
         <Text style={styles.name}>QTY: {data.QTY}</Text>
         :
         <Text style={styles.name}>QTY: 1</Text>
         }
+        <Text style={styles.name}>Total: {data.itemPrice}</Text>
+       
+        
         {/* <Text style={styles.name}>Drinks: 
         {data.map((item)=>{
           console.log(item)
@@ -98,13 +100,14 @@ export default function OrderCart (props) {
             <Text style={styles.drinksandNotes}>Drinks: No Drinks
             </Text>
             :
+            <View>
             <Text style={styles.drinksandNotes}>Drinks: 
              {data.drink1.name}({data.drink1.quantity}) <></>
              {data.drink2.name}({data.drink2.quantity}) <></>
              {data.drink3.name}({data.drink3.quantity}) <></>
-             {data.drink4.name}({data.drink4.quantity}) <></>
+             {data.drink4.name}({data.drink4.quantity}) ({data.drink1.totalDrinkPrice})<></>
             </Text>
-            
+             </View>
             }
             
            

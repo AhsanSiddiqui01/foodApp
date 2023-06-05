@@ -96,10 +96,10 @@ case actionTypes.ADD_TO_CART:
     cart: inCart
       ? state.cart.map((item) =>
           item.id === action.payload.id
-            ? { ...action.payload, price:action.price,QTY: action.QTY, notes:action.notes,drink1:action.drink1,drink2:action.drink2,drink3:action.drink3,drink4:action.drink4 }
+            ? { ...action.payload, itemPrice:action.itemPrice,totalPrice:action.totalPrice,QTY: action.QTY, notes:action.notes,drink1:action.drink1,drink2:action.drink2,drink3:action.drink3,drink4:action.drink4 }
             : item,
         )
-      : [...state.cart, { ...action.payload,price:action.price, QTY: action.QTY, notes:action.notes,drink1:action.drink1,drink2:action.drink2,drink3:action.drink3,drink4:action.drink4 }],
+      : [...state.cart, { ...action.payload,itemPrice:action.itemPrice,totalPrice:action.totalPrice, QTY: action.QTY, notes:action.notes,drink1:action.drink1,drink2:action.drink2,drink3:action.drink3,drink4:action.drink4 }],
 
       // ...state,
       // cart:[

@@ -64,6 +64,20 @@ const styles = StyleSheet.create({
       height: 20 * vw, width:  '100%', borderRadius: 1 * vw,
       backgroundColor:ThemeColors.darkBlue
   },
+  backArrow:{
+    top: '-11%', 
+    left: 10,
+    position:'absolute',
+    zIndex:99999,
+    // backgroundColor:ThemeColors.darkBlue,
+    padding:15,
+    borderRadius:25,
+  },
+  backArrowSize:
+  {
+    width:15,
+    height:15
+  },
 
 })
 export default styles;

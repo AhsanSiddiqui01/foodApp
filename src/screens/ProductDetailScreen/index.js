@@ -193,7 +193,7 @@ useEffect(() => {
     const dispatch = useDispatch()
    
     const addToCart = (props) => {
-      const drink1 = {name:'PEPSI',quantity:checkbox1Value}
+      const drink1 = {name:'PEPSI',quantity:checkbox1Value,totalDrinkPrice:DrinkPrices * total}
       const drink2 = {name:'7UP',quantity:checkbox2Value}
       const drink3 = {name:'FANTA',quantity:checkbox3Value}
       const drink4 = {name:'DEW',quantity:checkbox4Value}
@@ -207,7 +207,7 @@ useEffect(() => {
         const current = new Date();
         const currentHour = current.getHours();
         if( currentHour >= 9 && currentHour <=23 ){
-          dispatch({type:actionTypes.ADD_TO_CART,payload:data,price:ProductPrice * QTY + + DrinkPrices * total,notes,QTY,drink1,drink2,drink3,drink4})
+          dispatch({type:actionTypes.ADD_TO_CART,payload:data,itemPrice:ProductPrice * QTY,totalPrice:ProductPrice * QTY + + DrinkPrices * total,notes,QTY,drink1,drink2,drink3,drink4})
           console.log('notessfindding',data)
           setTimeout(()=>{
             navigation.navigate('OurProudct')
@@ -220,7 +220,7 @@ useEffect(() => {
       }
 
       const OrderRn = (props) => {
-        const drink1 = {name:'PEPSI',quantity:checkbox1Value}
+        const drink1 = {name:'PEPSI',quantity:checkbox1Value,totalDrinkPrice:DrinkPrices * total}
         const drink2 = {name:'7UP',quantity:checkbox2Value}
         const drink3 = {name:'FANTA',quantity:checkbox3Value}
         const drink4 = {name:'DEW',quantity:checkbox4Value}
@@ -239,7 +239,7 @@ useEffect(() => {
             })
           );
           if( currentHour >= 9 && currentHour <=23 ){
-            dispatch({type:actionTypes.ADD_TO_CART,payload:data,price:ProductPrice * QTY + + DrinkPrices * total,notes,QTY,drink1,drink2,drink3,drink4})
+            dispatch({type:actionTypes.ADD_TO_CART,payload:data,itemPrice:ProductPrice * QTY,totalPrice:ProductPrice * QTY + + DrinkPrices * total,notes,QTY,drink1,drink2,drink3,drink4})
          
             setTimeout(()=>{
               navigation.navigate('MenuScreen')

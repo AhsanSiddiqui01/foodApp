@@ -5,6 +5,7 @@ import styles from './styles';
 import {tabIcons} from '../../../assets/images';
 import IconButton from '../../Buttons/IconButton';
 import {BlurView} from '@react-native-community/blur';
+import LinearGradient from 'react-native-linear-gradient';
 const getIcon = (routeName, isActive) => {
 
   // console.log('getIconsss',routeName)
@@ -95,9 +96,11 @@ class Tab extends React.Component {
           blurAmount={20}
           reducedTransparencyFallbackColor="transparent"
         />
-        <View style={styles.buttonContainerTwo}>
+        <LinearGradient colors={['#004e92', '#457fca']} style={styles.buttonContainerTwo} start={{ x: 1, y: 1 }} end={{ x: 1, y: 0 }}>
+    
           {renderButtons(state, descriptors, navigation, position)}
-        </View>
+       
+        </LinearGradient>
       </Animated.View>
     );
   }

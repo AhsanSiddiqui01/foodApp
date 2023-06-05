@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10,
     height: 7 * vh,
-    width: 95 * vw,
+    // width: 95 * vw,
     borderRadius: 3 * vw,
     position: 'absolute',
     bottom: 2 * vh,
-    left:  3 * vw,
-    backgroundColor: '#063970',
+    left:  5 * vw,
+    // backgroundColor: '#063970',
   },
   // blur: {borderRadius: 3 * vw, flex: 1},
   buttonContainer: {
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0 * vh,
     left: 0 * vw,
-    backgroundColor: 'rgba(255,255,255,0.0)',
+    // backgroundColor: 'rgba(255,255,255,0.0)',
+    borderRadius:6
   },
   tabButton: {
     height: 7 * vh,

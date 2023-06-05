@@ -7,19 +7,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: fonts.circular.bold,
     fontSize: 2.6 * vh,
-    paddingBottom: 2 * vh,
+    // backgroundColor:'red'
+    // paddingBottom: 2 * vh,
   },
   defaultHeaderTitleContainerStyle: {},
   defaultHeaderRightContainerStyle: {
-    paddingBottom: 2 * vh,
-    paddingRight: 5 * vw,
+    // paddingBottom: 2 * vh,
+    // paddingRight: 5 * vw,
   },
-  defaultHeaderLeftContainerStyle: {
-    paddingBottom: 2 * vh,
-    paddingLeft: 5 * vw,
-  },
+  // defaultHeaderLeftContainerStyle: {
+  //   paddingBottom: 2 * vh,
+  //   paddingLeft: 5 * vw,
+  // },
   deafultHeaderStyle: {
-    height: 13 * vh,
+    height: 11 * vh,
     // paddingBottom: 0 * vh,
   },
   seachBarStyle: {

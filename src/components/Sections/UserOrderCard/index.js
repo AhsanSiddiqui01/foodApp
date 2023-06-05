@@ -101,13 +101,15 @@ console.log('checkkkk',mergedObject);
         </View>
         <View >
         
-        <Text style={styles.textField}>{item.name}</Text>
-        <Text style={styles.textField}>Price: {item.price}</Text>
+        <Text style={styles.textField}>{item.name} ({item.price})</Text>
         {item.QTY != '' ? 
         <Text style={styles.textField}>QTY: {item.QTY}</Text>
         :
         <Text style={styles.textField}>QTY: 1</Text>
         }
+       
+        <Text style={styles.textField}>Total: {item.itemPrice}</Text>
+        
        
         </View> 
       
@@ -118,12 +120,14 @@ console.log('checkkkk',mergedObject);
             <Text style={styles.drinksandNotes}>Drinks: No Drinks
             </Text>
             :
+            <View>
             <Text style={styles.drinksandNotes}>Drinks: 
              {item.drink1.name}({item.drink1.quantity}) <></>
              {item.drink2.name}({item.drink2.quantity}) <></>
              {item.drink3.name}({item.drink3.quantity}) <></>
-             {item.drink4.name}({item.drink4.quantity}) <></>
+             {item.drink4.name}({item.drink4.quantity})  ({item.drink1.totalDrinkPrice})<></>
             </Text>
+            </View>
             
             }
         {

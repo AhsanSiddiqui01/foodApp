@@ -53,7 +53,7 @@ function HistoryCart (props) {
                   <Text style={styles.orderTexttextField}>Time:   {displayTIme}</Text>
                 </View>
                 <View style={{justifyContent:'center',alignItems:'center',marginTop:10}}>
-                <Text style={{color:'white'}}>Your Order Amount: {TotalAmount} Rs</Text>
+                <Text style={{color:'white'}}>Sub Total: {TotalAmount} Rs</Text>
                 </View>
             </View>
       :
@@ -76,14 +76,15 @@ function HistoryCart (props) {
         />
         </View>
         <View >
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.name}>Price: {item.price}</Text>
+        <Text style={styles.name}>{item.name} ({item.price})</Text>
         {item.QTY != '' ? 
         <Text style={styles.name}>QTY: {item.QTY}</Text>
         :
         <Text style={styles.name}>QTY: 1</Text>
         }
      
+        <Text style={styles.name}>Total: {item.itemPrice}</Text>
+  
         </View> 
         </View>
         <View style={styles.drinksandNotesContainer}>
@@ -92,13 +93,14 @@ function HistoryCart (props) {
             <Text style={styles.drinksandNotes}>Drinks: No Drinks
             </Text>
             :
+            <View>
             <Text style={styles.drinksandNotes}>Drinks: 
              {item.drink1.name}({item.drink1.quantity}) <></>
              {item.drink2.name}({item.drink2.quantity}) <></>
              {item.drink3.name}({item.drink3.quantity}) <></>
-             {item.drink4.name}({item.drink4.quantity}) <></>
+             {item.drink4.name}({item.drink4.quantity}) ({item.drink1.totalDrinkPrice})<></>
             </Text>
-            
+            </View>
             }
              {
           item.notes != ''?
