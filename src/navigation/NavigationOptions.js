@@ -1,9 +1,12 @@
 import React from 'react';
 import { TransitionPresets } from '@react-navigation/stack';
+import { Image } from 'react-native';
 import styles from './styles';
 import headerBackground from './headerBackground';
 import MenuButton from '../components/Buttons/MenuButton';
 import MainInput from '../components/Input/MainInput';
+import { icons } from '../assets/images';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 export const getNavigationOptions = (props) => {
   var activeRouteName = props.route.state
     ? props.route.state.routes[props.route.state.index].name
@@ -13,6 +16,7 @@ export const getNavigationOptions = (props) => {
     ...TransitionPresets.SlideFromRightIOS,
     headerShown: shouldHeaderBeShown(activeRouteName),
     logOutShown: showHeaderRight(activeRouteName),
+    backButton: showHeaderLeft(activeRouteName),
     headerTitle: getTitle(activeRouteName),
     searchShown: showSearchMenuItem(activeRouteName),
     headerBackground: headerBackground,
@@ -64,6 +68,18 @@ export const showHeaderRight = (activeRouteName, navigation, onBackPress) => {
       return false;
   }
 };
+export const showHeaderLeft = (activeRouteName, navigation, onBackPress) => {
+  switch (activeRouteName) {
+    case 'ProductDetail':
+    case 'TotalScreen':  
+    case 'MenuScreen':
+    case 'History':
+      return renderBackButton();
+    default:
+      return false;
+  }
+};
+
 
 export const showSearchMenuItem = (activeRouteName) => {
   switch (activeRouteName) {
@@ -79,6 +95,13 @@ const renderLogoutButton = () => {
     <MenuButton/>
   );
 };
+const renderBackButton = () => {
+  return (
+    <TouchableOpacity style={{padding:5,marginLeft:10}}>
+    <Image source={icons.previous} style={{width:20,height:20}}/>
+    </TouchableOpacity>
+  );
+};
 const searchingMenu = () => {
   return(
     <MainInput 
@@ -92,6 +115,7 @@ export const defaultOptions = (activeRouteName, navigation) => {
   return {
     ...TransitionPresets.SlideFromRightIOS,
     headerRight:  () => showHeaderRight(activeRouteName, navigation),
+    headerLeft:   () => showHeaderLeft(activeRouteName, navigation),
     headerSearch: () => showSearchMenuItem(activeRouteName),
     headerTitleAlign: 'center',
     headerTitleStyle: styles.defaultHeaderTitleStyle,

@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
       backgroundColor:ThemeColors.darkBlue
   },
   backArrow:{
-    top: '-11%', 
+    top: '-41%', 
     left: 10,
     position:'absolute',
     zIndex:99999,
