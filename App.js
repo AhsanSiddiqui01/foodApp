@@ -14,7 +14,7 @@
 // export default App;
 
 
-import React,{ useState  } from 'react';
+import React,{ useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Navigation from './src/navigation';
@@ -26,16 +26,21 @@ import Loader from './src/components/Loader';
 
 const App = () => {
   const [isLoad, setIsLoad] = useState(true);
-  setTimeout(() => {
-    setIsLoad(false);
-  }, 4000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoad(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <View style={styles.container}>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-        {isLoad  ? <SplashScreen/> :  null}
-        <Loader/>
+        {/* Loader is a Modal (always on top), so keep it hidden behind the splash */}
+        {!isLoad && <Loader/>}
         <Navigation/>
+        {/* rendered last so it sits above the navigation while the app loads */}
+        {isLoad  ? <SplashScreen/> :  null}
         </PersistGate>
       </Provider>
     </View>

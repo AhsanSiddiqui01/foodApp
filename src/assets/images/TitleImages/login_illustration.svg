@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 75 490 420" width="490" height="420">
+  <!-- background blob -->
+  <path d="M120 250 C 90 150, 210 70, 320 95 C 420 115, 520 120, 535 230 C 552 340, 500 450, 380 470 C 260 492, 150 470, 105 390 C 80 345, 135 310, 120 250 Z" fill="#DCE8FB"/>
+  <path d="M430 110 C 500 120, 545 170, 540 240 C 535 300, 470 300, 440 250 C 410 200, 380 105, 430 110 Z" fill="#C3D6F7"/>
+
+  <!-- window grid -->
+  <g fill="#B9CFF5">
+    <rect x="395" y="150" width="48" height="58" rx="4"/>
+    <rect x="449" y="150" width="48" height="58" rx="4"/>
+    <rect x="395" y="214" width="48" height="58" rx="4"/>
+    <rect x="449" y="214" width="48" height="58" rx="4"/>
+  </g>
+
+  <!-- small floating shapes -->
+  <circle cx="150" cy="140" r="9" fill="#C3D6F7"/>
+  <circle cx="520" cy="360" r="7" fill="#F19C1C" opacity="0.6"/>
+  <circle cx="95" cy="320" r="6" fill="#1458C4" opacity="0.35"/>
+  <path d="M215 95 l6 14 l14 6 l-14 6 l-6 14 l-6 -14 l-14 -6 l14 -6 Z" fill="#F19C1C"/>
+  <path d="M500 95 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4 Z" fill="#1458C4" opacity="0.5"/>
+
+  <!-- chat bubble left: fork & spoon -->
+  <g>
+    <rect x="95" y="175" width="105" height="72" rx="16" fill="#1458C4"/>
+    <path d="M175 245 L190 268 L160 247 Z" fill="#1458C4"/>
+    <g fill="#FFFFFF">
+      <rect x="127" y="188" width="4" height="18" rx="2"/>
+      <rect x="134" y="188" width="4" height="18" rx="2"/>
+      <rect x="141" y="188" width="4" height="18" rx="2"/>
+      <path d="M127 204 h18 v4 a9 9 0 0 1 -9 9 a9 9 0 0 1 -9 -9 Z"/>
+      <rect x="133" y="214" width="6" height="22" rx="3"/>
+      <ellipse cx="166" cy="200" rx="8" ry="12"/>
+      <rect x="163" y="208" width="6" height="28" rx="3"/>
+    </g>
+  </g>
+
+  <!-- chat bubble right: heart -->
+  <g>
+    <rect x="440" y="246" width="80" height="54" rx="14" fill="#FFFFFF"/>
+    <path d="M455 298 L447 318 L471 299 Z" fill="#FFFFFF"/>
+    <path d="M480 288 C 463 276, 459 264, 467 258 C 473 253, 480 257, 480 262 C 480 257, 487 253, 493 258 C 501 264, 497 276, 480 288 Z" fill="#F75938"/>
+  </g>
+
+  <!-- phone -->
+  <g>
+    <rect x="222" y="128" width="168" height="330" rx="28" fill="#15222B"/>
+    <rect x="232" y="140" width="148" height="306" rx="20" fill="#FFFFFF"/>
+    <rect x="281" y="146" width="50" height="9" rx="4.5" fill="#15222B"/>
+    <!-- app header -->
+    <rect x="246" y="168" width="120" height="14" rx="7" fill="#DCE8FB"/>
+    <circle cx="352" cy="175" r="5" fill="#1458C4"/>
+    <!-- food card -->
+    <rect x="246" y="194" width="120" height="132" rx="16" fill="#FFF4E0"/>
+    <!-- burger -->
+    <g>
+      <path d="M262 262 C 262 228, 350 228, 350 262 Z" fill="#F19C1C"/>
+      <g fill="#FFF4E0">
+        <ellipse cx="288" cy="246" rx="3" ry="1.8"/>
+        <ellipse cx="306" cy="240" rx="3" ry="1.8"/>
+        <ellipse cx="324" cy="246" rx="3" ry="1.8"/>
+        <ellipse cx="300" cy="253" rx="3" ry="1.8"/>
+        <ellipse cx="316" cy="254" rx="3" ry="1.8"/>
+      </g>
+      <path d="M258 266 q8 -8 15 0 t15 0 t15 0 t15 0 t15 0 t15 0 v6 h-90 Z" fill="#4CAF50"/>
+      <path d="M262 272 h88 l-14 10 l-16 -6 l-14 8 l-16 -8 l-14 6 Z" fill="#FFC93C"/>
+      <rect x="260" y="276" width="92" height="14" rx="7" fill="#7A3E1D"/>
+      <path d="M262 292 h88 v4 a10 10 0 0 1 -10 10 h-68 a10 10 0 0 1 -10 -10 Z" fill="#F19C1C"/>
+    </g>
+    <!-- text lines -->
+    <rect x="246" y="340" width="90" height="10" rx="5" fill="#15222B" opacity="0.8"/>
+    <rect x="246" y="358" width="60" height="8" rx="4" fill="#C1C0C8"/>
+    <rect x="320" y="356" width="46" height="12" rx="6" fill="#DCE8FB"/>
+    <!-- order button -->
+    <rect x="246" y="388" width="120" height="34" rx="17" fill="#F75938"/>
+    <rect x="276" y="401" width="60" height="8" rx="4" fill="#FFFFFF"/>
+  </g>
+
+  <!-- table -->
+  <rect x="70" y="458" width="470" height="16" rx="8" fill="#1458C4"/>
+  <rect x="92" y="474" width="426" height="10" rx="5" fill="#154689" opacity="0.5"/>
+
+  <!-- biryani bowl with steam -->
+  <g>
+    <path d="M130 382 q8 -14 0 -26 q-8 -12 0 -24" stroke="#B9CFF5" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M160 382 q8 -14 0 -26 q-8 -12 0 -24" stroke="#B9CFF5" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="148" cy="404" rx="62" ry="16" fill="#F7D774"/>
+    <circle cx="125" cy="398" r="6" fill="#F75938"/>
+    <circle cx="160" cy="396" r="7" fill="#7A3E1D"/>
+    <circle cx="178" cy="404" r="5" fill="#4CAF50"/>
+    <circle cx="140" cy="408" r="4" fill="#F19C1C"/>
+    <path d="M84 404 h128 a64 54 0 0 1 -128 0 Z" fill="#1458C4"/>
+    <path d="M84 404 h128 a64 54 0 0 1 -5 21 h-118 a64 54 0 0 1 -5 -21 Z" fill="#3B78D8"/>
+    <rect x="126" y="452" width="44" height="8" rx="3" fill="#154689"/>
+  </g>
+
+  <!-- plant -->
+  <g>
+    <path d="M462 410 c-28 -12 -34 -44 -22 -66 c18 14 26 40 22 66 Z" fill="#4CAF50"/>
+    <path d="M470 410 c22 -16 24 -50 8 -70 c-14 18 -18 44 -8 70 Z" fill="#66BB6A"/>
+    <path d="M466 410 c-4 -30 0 -58 2 -78 c10 20 8 50 -2 78 Z" fill="#43A047"/>
+    <path d="M440 410 h56 l-8 48 h-40 Z" fill="#7E57C2"/>
+    <rect x="436" y="404" width="64" height="12" rx="4" fill="#9575CD"/>
+  </g>
+</svg>

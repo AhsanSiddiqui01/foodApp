@@ -1,30 +1,60 @@
 import React, {useRef,useEffect} from "react";
-import { ImageBackground,Animated,Image } from "react-native";
-import LogoRemove from '../../assets/logo2.png'
+import { Animated, StyleSheet, View } from "react-native";
+import { TitleImages } from '../../assets/images';
+import { fonts } from '../../assets/fonts';
+import { vh, vw } from '../../utils/Units';
 
 const SplashScreen = () => {
     const fadeAnimation = useRef(new Animated.Value(0)).current
+    const slideAnimation = useRef(new Animated.Value(3 * vh)).current
     useEffect(()=>{
-        Animated.timing(
-            fadeAnimation,
-            {
-                toValue:1,
-                duration:1000,
-                useNativeDriver: true // Add This line
-            }
-        ).start();
-    },[fadeAnimation])
+        Animated.parallel([
+            Animated.timing(fadeAnimation, { toValue:1, duration:900, useNativeDriver: true }),
+            Animated.timing(slideAnimation, { toValue:0, duration:900, useNativeDriver: true }),
+        ]).start();
+    },[fadeAnimation, slideAnimation])
 
     return(
-        <ImageBackground
-        resizeMode='cover'
-        style={{height:'100%',width:'100%'}}
-        imageStyle={{ opacity: 0.6 }}
-        >
-        <Animated.View style={{justifyContent:'center',alignItems:'center',height:'100%',width:'100%',opacity:fadeAnimation,backgroundColor:'white'}}>
-            <Image source={LogoRemove} style={{width:400,marginTop:0}}/>
-        </Animated.View>
-        </ImageBackground>
+        <View style={styles.container}>
+            <Animated.View style={[styles.content, {opacity:fadeAnimation, transform:[{translateY:slideAnimation}]}]}>
+                <Animated.Image source={TitleImages.Logo} style={styles.illustration}/>
+                <Animated.Text style={styles.brand}>foody</Animated.Text>
+                <Animated.Text style={styles.tagline}>LUNCH. REIMAGINED</Animated.Text>
+            </Animated.View>
+        </View>
     )
-} 
+}
+
+const styles = StyleSheet.create({
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        zIndex: 10,
+        elevation: 30,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    content: {
+        alignItems: 'center',
+    },
+    illustration: {
+        // login_illustration.png is 490x420
+        width: 80 * vw,
+        height: 80 * vw * (420 / 490),
+        resizeMode: 'contain',
+    },
+    brand: {
+        fontFamily: fonts.circular.bold,
+        fontSize: 6 * vh,
+        color: '#15222B',
+        marginTop: 3 * vh,
+    },
+    tagline: {
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.6 * vh,
+        letterSpacing: 4,
+        color: '#1458C4',
+        marginTop: 0.5 * vh,
+    },
+});
 export default SplashScreen

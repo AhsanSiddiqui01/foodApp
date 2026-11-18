@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { vh,vw } from '../../utils/Units';
 import MainInput from '../../components/Input/MainInput';
+import CircularBold from '../../components/Text/CircularBold';
+import PoppinsRegular from '../../components/Text/PoppinsRegular';
+import { icons } from '../../assets/images';
 class ProductList extends Component {
   constructor(props) {
     super(props);
@@ -63,10 +66,17 @@ class ProductList extends Component {
       <View style={styles.container}>
         <View style={styles.searhBar}>
           <MainInput
-            placeholder=" Search Item"
+            placeholder="Search for biryani, burger..."
+            leftIcon={icons.search}
             style={styles.inputField}
             onChangeText={(keyword) => this.onStateChange('keyword', keyword)}
           />
+        </View>
+        <View style={styles.sectionHeader}>
+          <CircularBold style={styles.sectionTitle}>Today's Menu</CircularBold>
+          <PoppinsRegular style={styles.sectionCount}>
+            {(item || []).length} items
+          </PoppinsRegular>
         </View>
   <FlatList 
   showsVerticalScrollIndicator={false}
@@ -76,7 +86,7 @@ class ProductList extends Component {
   // horizontal={true}
   numColumns={2}
   keyExtractor={item=>item.id}
-  contentContainerStyle={{paddingBottom:10*vh}}
+  contentContainerStyle={styles.listContent}
   />
       </View>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,TextInput } from 'react-native';
+import { View,TextInput,Image } from 'react-native';
 import ThemeColors from '../../../utils/ThemeColors';
 import { icons } from '../../../assets/images';
 import { fonts } from '../../../assets/fonts';
@@ -65,6 +65,9 @@ class MainInput extends React.Component {
 
     return (
       <View style={[styles.fieldContainer, this.props.style]}>
+        {this.props.leftIcon && (
+          <Image source={this.props.leftIcon} style={styles.leftIcon} />
+        )}
         <TextInput
           placeholder="Text Field"
           placeholderTextColor={ThemeColors.placeholderGrey}

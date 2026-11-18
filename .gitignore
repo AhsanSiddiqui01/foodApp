@@ -59,3 +59,7 @@ buck-out/
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/
+
+# Firebase service account keys (never commit)
+serviceAccountKey*.json
+*-firebase-adminsdk-*.json

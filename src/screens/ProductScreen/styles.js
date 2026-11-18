@@ -4,52 +4,45 @@ import {vh, vw} from '../../utils/Units';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: ThemeColors.white,
-    justifyContent:'center',alignItems:'center'
-  },
-  list: {
-    width: 100 * vw,
-    paddingVertical: 3 * vh,
+    backgroundColor: '#F5F7FB',
+    alignItems:'center'
   },
   listContent: {
-    alignItems: 'center',
-    paddingTop: 1 * vh,
-    paddingBottom: 13 * vh,
+    paddingHorizontal: 2 * vw,
+    paddingBottom: 12 * vh,
   },
   inputField: {
-    marginTop: 0 * vh,
-    width: 80 * vw,
-    height: 5 * vh,
-    borderWidth: 0*vw,
+    width: 92 * vw,
+    height: 6.5 * vh,
     backgroundColor: 'white',
-    flexDirection: 'row',
-    alignItems: 'center',
-    // alignSelf:'center'
+    borderColor: 'transparent',
+    borderRadius: 14,
   },
   searhBar:{
-            height: 9 * vh,
-            width: 90 * vw,
-            borderRadius: 2 * vw,
-            backgroundColor: ThemeColors.darkBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 5 * vw,
-            alignItems: 'center',
-            shadowColor: "#000",
-            marginBottom:20,
-            paddingTop:10,
-            paddingBottom:10,
-            shadowOffset: {
-              width: 0,
-              height: 5,
-            },
-            shadowOpacity: 0.34,
-            shadowRadius: 6.27,
-            
-            elevation: 10,
-
-
-            marginTop: 2 * vh
-  }
+    marginTop: 2 * vh,
+    borderRadius: 14,
+    backgroundColor: 'white',
+    elevation: 4,
+    shadowColor: '#1458C4',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+  },
+  sectionHeader: {
+    width: 92 * vw,
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginTop: 2.5 * vh,
+    marginBottom: 1.5 * vh,
+  },
+  sectionTitle: {
+    color: ThemeColors.backgroundBlack,
+    fontSize: 2.4 * vh,
+  },
+  sectionCount: {
+    color: ThemeColors.fontLightGrey,
+    fontSize: 1.6 * vh,
+  },
 });
 export default styles;

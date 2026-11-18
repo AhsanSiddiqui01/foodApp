@@ -1,136 +1,168 @@
 import React, { useEffect,useState } from 'react';
-import { View, Text,Image,ScrollView,SafeAreaView, TouchableOpacity,Button } from 'react-native';
+import { View, Text,Image,ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import styles from './styles'
-import Components from '../../components';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
+import firestore from '@react-native-firebase/firestore'
 import actionTypes from '../../redux/actions/ActionTypes';
-import MainInput from '../../components/Input/MainInput';
-import { showToast } from '../../utils';
+import { showToast, isOrderTimeOpen, ORDER_TIME_TEXT } from '../../utils';
 import { connect } from 'react-redux';
-import { icons } from '../../assets/images';
-import OrderButton from '../../components/Buttons/OrderButton';
-import QuantityButton from '../../components/Buttons/QuantityButton';
-import { TextInput } from 'react-native-gesture-handler';
+import { icons, getFoodImage } from '../../assets/images';
+
+const EXTRA_SECTIONS = [
+  { category: 'drink', title: 'Cold Drinks' },
+  { category: 'side', title: 'Add Sides' },
+];
+
 function ProductDetails(props) {
-  // console.log('checkkkingggg',props)
-  let [QTY, setNum]= useState(1);
-  let incNum =()=>{
-    if(QTY<99)
-    {
-    setNum(Number(QTY)+1);
-    }
+  const [QTY, setNum] = useState(1);
+  const [notes, setNotes] = useState('');
+  const [extras, setExtras] = useState([]);
+  const [selectedExtras, setSelectedExtras] = useState({});
+  const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const data = props.route.params.foodList;
+
+  useEffect(()=>{
+    firestore().collection('extras').orderBy('order').get()
+      .then((snapshot) => {
+        setExtras(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
+      })
+      .catch((error) => console.log('extras error', error))
+  },[])
+
+  const incNum = () => { if (QTY < 99) setNum(QTY + 1) };
+  const decNum = () => { if (QTY > 1) setNum(QTY - 1) };
+
+  const toggleExtra = (id) => {
+    setSelectedExtras((current) => ({ ...current, [id]: !current[id] }));
   };
-  let decNum = () => {
-     if(QTY>1)
-     {
-      setNum(QTY - 1);
-     }
+
+  const chosenExtras = extras.filter((extra) => selectedExtras[extra.id]);
+  const total = Number(data.price || 0) * QTY
+    + chosenExtras.reduce((sum, extra) => sum + Number(extra.price || 0), 0);
+
+  // Main item plus each chosen extra go to the cart as separate items, so totals count them too
+  const addItemsToCart = () => {
+    dispatch({type:actionTypes.ADD_TO_CART,payload:data,notes,QTY})
+    chosenExtras.forEach((extra) => {
+      dispatch({type:actionTypes.ADD_TO_CART,payload:extra,notes:'',QTY:1})
+    })
+    setNotes('')
+    setNum(1)
+    setSelectedExtras({})
+  };
+
+  const addToCart = () => {
+    if( !isOrderTimeOpen() ){
+      return showToast(`Orders are closed. Order between ${ORDER_TIME_TEXT}`);
+    }
+    addItemsToCart()
+    showToast('Added to cart')
+    navigation.navigate('OurProudct')
   }
- let handleChange = (e)=>{
-   setNum(e.target.value);
+
+  const OrderRn = () => {
+    if( !isOrderTimeOpen() ){
+      return showToast(`Orders are closed. Order between ${ORDER_TIME_TEXT}`);
+    }
+    addItemsToCart()
+    navigation.navigate('MenuStack', { screen: 'MenuScreen' })
   }
-    const navigation = useNavigation();
-    const ProductImage = props.route.params.foodList.image;
-    const ProductName = props.route.params.foodList.name;
-    const ProductPrice = props.route.params.foodList.price;
-    const ProductDetail = props.route.params.foodList.shop;
-    
-    const [notes, setNotes] = useState("");
-    // const [QTY, setQty] = useState("");
 
-    const data = props.route.params.foodList;
-    const dispatch = useDispatch()
-    useEffect(()=>{
-        // console.log('PRODUCTDETAIL',data)
-      },[])
-    const addToCart = (props) => {
-      setNotes('')
-      setNum('1')
-      // const ItemId = props.cartDetail
-      // console.log('addItemId', ItemId);
-
-        const current = new Date();
-        const currentHour = current.getHours();
-        if( currentHour >= 9 && currentHour <=23 ){
-          dispatch({type:actionTypes.ADD_TO_CART,payload:data,notes,QTY})
-          // console.log('notessfindding',data)
-          setTimeout(()=>{
-            navigation.navigate('OurProudct')
-          },1000)
-        }
-        else{
-          return showToast("You can't place order right now");
-        }
-       
-      }
-
-      const OrderRn = (props) => {
-        setNotes('')
-        setNum('1')
-          const current = new Date();
-          const currentHour = current.getHours();
-          if( currentHour >= 9 && currentHour <=23 ){
-            dispatch({type:actionTypes.ADD_TO_CART,payload:data,notes,QTY})
-            setTimeout(()=>{
-              navigation.navigate('MenuScreen')
-            },1000)
-          }
-          else{
-            return showToast("You can't place order right now");
-          }
-        }
+  const renderExtra = (extra) => {
+    const selected = !!selectedExtras[extra.id];
     return (
-    <View style={styles.mainContainer}>
-        <TouchableOpacity style={styles.backArrow}
-          activeOpacity={.8}
-          onPress={()=>{
-          navigation.navigate('OurProudct',{
-            all_product_list:props.all_product_list.item
-          })
-        }}
-        >
-        <Image source={icons.previous} style={styles.backArrowSize}/>
-        </TouchableOpacity>
-    <ScrollView>
-      <Image source={{uri:ProductImage}} style={styles.TopImage} resizeMode='cover'/>
-    
-      <View style={styles.contentContainer}>
-        {/* <Text style={styles.name}></Text> */}
-        <Text style={styles.otherDetail}>{ProductName}</Text>
-        <Text style={styles.otherDetail}>Price :<Text style={styles.ProductDetail}>{ProductPrice}</Text></Text>
-        <Text style={styles.otherDetail}>Shop: <Text style={styles.ProductDetail}>{ProductDetail}</Text></Text>
-        <View style={styles.qtyContainer}>
-        <Text style={styles.otherDetail}>Quantity:</Text>
-        <QuantityButton title="-"  onPress={decNum} mainContainerStyle={styles.incrementBtn}/>
-        <Text onChangeText={handleChange} style={styles.qtyText}>{QTY}</Text>
-        <QuantityButton title="+"onPress={incNum} mainContainerStyle={styles.decrementBtn}/>
-       
+      <TouchableOpacity
+        key={extra.id}
+        style={[styles.extraCard, selected && styles.extraCardSelected]}
+        activeOpacity={0.8}
+        onPress={() => toggleExtra(extra.id)}
+      >
+        <Image source={getFoodImage(extra.image)} style={styles.extraImage} />
+        <Text style={styles.extraName} numberOfLines={1}>{extra.name}</Text>
+        <Text style={styles.extraPrice}>+ Rs {extra.price}</Text>
+        <View style={[styles.extraCheck, selected && styles.extraCheckSelected]}>
+          <Text style={styles.extraCheckText}>{selected ? '✓' : '+'}</Text>
         </View>
+      </TouchableOpacity>
+    );
+  };
 
-        
-        
-        {/* <MainInput
-            placeholder="Quantity"
-            style={styles.Qtyfield}
-            value={QTY}
-            onChangeText={handleChange}
-            keyboardType={'numeric'}
-          /> */}
-        {/* <Text style={styles.otherDetail}>Notes:</Text> */}
-        <TextInput
-           placeholder="More Detail"
-           style={styles.moreDetail}
-           value={notes}
-           onChangeText={(text) => setNotes(text)}
-        
-        />
-      </View>
-      <OrderButton title={'Add To Cart'} mainContainerStyle={styles.addToCartBtn} onPress={()=>addToCart(props)}/>
-      <OrderButton title={'Order Now'} mainContainerStyle={styles.orderNowBtn} onPress={()=>OrderRn(props)}/>
-        {/* <Components.AppButton title={'Add To Cart'} mainContainerStyle={styles.checkOutBtn} onPress={()=>addToCart(props)}/> */}
-     </ScrollView>
-     </View>
+  return (
+    <View style={styles.mainContainer}>
+      <TouchableOpacity style={styles.backArrow}
+        activeOpacity={.8}
+        onPress={()=> navigation.navigate('OurProudct')}
+      >
+        <Image source={icons.previous} style={styles.backArrowSize}/>
+      </TouchableOpacity>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        <Image source={getFoodImage(data.image)} style={styles.TopImage} resizeMode='cover'/>
+
+        <View style={styles.sheet}>
+          <View style={styles.titleRow}>
+            <View style={styles.titleInfo}>
+              <Text style={styles.name}>{data.name}</Text>
+              {!!data.shop && <Text style={styles.shop}>{data.shop}</Text>}
+            </View>
+            <Text style={styles.price}>Rs {data.price}</Text>
+          </View>
+          {!!data.description && <Text style={styles.description}>{data.description}</Text>}
+
+          <View style={styles.qtyRow}>
+            <Text style={styles.sectionTitle}>Quantity</Text>
+            <View style={styles.stepper}>
+              <TouchableOpacity style={styles.stepperBtn} onPress={decNum} activeOpacity={0.7}>
+                <Text style={styles.stepperBtnText}>−</Text>
+              </TouchableOpacity>
+              <Text style={styles.qtyText}>{QTY}</Text>
+              <TouchableOpacity style={[styles.stepperBtn, styles.stepperBtnPrimary]} onPress={incNum} activeOpacity={0.7}>
+                <Text style={[styles.stepperBtnText, styles.stepperBtnTextPrimary]}>+</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {EXTRA_SECTIONS.map(({ category, title }) => {
+            const items = extras.filter((extra) => extra.category === category);
+            if (items.length === 0) {
+              return null;
+            }
+            return (
+              <View key={category}>
+                <Text style={[styles.sectionTitle, styles.extrasTitle]}>{title}</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.extrasRow}>
+                  {items.map(renderExtra)}
+                </ScrollView>
+              </View>
+            );
+          })}
+
+          <Text style={[styles.sectionTitle, styles.extrasTitle]}>Special Instructions</Text>
+          <TextInput
+            placeholder="e.g. less spicy, no onion"
+            placeholderTextColor="#9AA3B5"
+            style={styles.moreDetail}
+            value={notes}
+            onChangeText={(text) => setNotes(text)}
+            multiline
+          />
+
+          <View style={styles.totalRow}>
+            <Text style={styles.totalLabel}>Total</Text>
+            <Text style={styles.totalValue}>Rs {total}</Text>
+          </View>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={[styles.actionBtn, styles.cartBtn]} activeOpacity={0.8} onPress={addToCart}>
+              <Text style={[styles.actionBtnText, styles.cartBtnText]}>Add to Cart</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.actionBtn, styles.orderBtn]} activeOpacity={0.8} onPress={OrderRn}>
+              <Text style={styles.actionBtnText}>Order Now</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 const mapState = (state) => {

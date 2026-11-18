@@ -1,5 +1,6 @@
 import React from 'react';
-import {Animated, View} from 'react-native';
+import {Animated, View, Text} from 'react-native';
+import {connect} from 'react-redux';
 import ThemeColors from '../../../utils/ThemeColors';
 import styles from './styles';
 import {tabIcons} from '../../../assets/images';
@@ -22,8 +23,8 @@ const getIcon = (routeName, isActive) => {
     }
     case 'OrderStack': {
       return isActive
-        ? tabIcons.HistoryActive
-        : tabIcons.HistoryInactive;
+        ? tabIcons.OrdersActive
+        : tabIcons.OrdersInactive;
     }
     case 'TotalStack': {
       return isActive
@@ -32,7 +33,7 @@ const getIcon = (routeName, isActive) => {
     }
   }
 };
-const renderButtons = (state, descriptors, navigation, position) => {
+const renderButtons = (state, descriptors, navigation, position, cartCount) => {
   return state.routes.map((route, index) => {
     var isFocused = index == state.index;
     const onPress = () => {
@@ -53,16 +54,24 @@ const renderButtons = (state, descriptors, navigation, position) => {
         target: route.key,
       });
     };
+    const showBadge = route.name === 'MenuStack' && cartCount > 0;
     return (
-      <IconButton
-        rippleColor={isFocused ? ThemeColors.fontDarkGrey : ThemeColors.primary}
-        rippleCentered={true}
-        onPress={onPress}
-        onLongPress={onLongPress}
-        icon={getIcon(route.name, isFocused)}
-        iconStyle={styles.tabIcon}
-        style={styles.tabButton}
-      />
+      <View key={route.key}>
+        <IconButton
+          rippleColor={ThemeColors.primary}
+          rippleCentered={true}
+          onPress={onPress}
+          onLongPress={onLongPress}
+          icon={getIcon(route.name, isFocused)}
+          iconStyle={styles.tabIcon}
+          style={[styles.tabButton, isFocused && styles.tabButtonActive]}
+        />
+        {showBadge && (
+          <View style={styles.badge} pointerEvents="none">
+            <Text style={styles.badgeText}>{cartCount > 99 ? '99+' : cartCount}</Text>
+          </View>
+        )}
+      </View>
     );
   });
 };
@@ -96,10 +105,17 @@ class Tab extends React.Component {
           reducedTransparencyFallbackColor="transparent"
         />
         <View style={styles.buttonContainerTwo}>
-          {renderButtons(state, descriptors, navigation, position)}
+          {renderButtons(state, descriptors, navigation, position, this.props.cartCount)}
         </View>
       </Animated.View>
     );
   }
 }
-export default Tab;
+// Badge on the cart tab shows the total quantity of items in the cart
+const mapStateToProps = (state) => ({
+  cartCount: (state.GeneralReducer.cart || []).reduce(
+    (sum, item) => sum + (Number(item.QTY) || 1),
+    0,
+  ),
+});
+export default connect(mapStateToProps)(Tab);

@@ -9,22 +9,28 @@ const styles = StyleSheet.create({
     // width: 80 * vw,
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: ThemeColors.borderGrey,
+    borderColor: '#E3E8F0',
     alignItems: 'center',
-  
-    backgroundColor:'white',
-    paddingHorizontal: 3 * vw,
-    borderRadius: 5,
-    height: 5 * vh,
-    
+
+    backgroundColor: '#F5F7FB',
+    paddingHorizontal: 4 * vw,
+    borderRadius: 12,
+    height: 6 * vh,
+
+  },
+  leftIcon: {
+    height: 2.4 * vh,
+    width: 2.4 * vh,
+    resizeMode: 'contain',
+    marginRight: 3 * vw,
   },
   field: {
     fontFamily: fonts.Poppins.light,
-    width: 66 * vw,
+    flex: 1,
     padding: 0,
     margin: 0,
-    color:'black',
-    backgroundColor:'white'
+    color: ThemeColors.fontBlack,
+    backgroundColor: 'transparent'
   },
 });
 export default styles;

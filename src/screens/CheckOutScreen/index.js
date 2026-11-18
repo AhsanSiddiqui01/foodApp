@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import actionTypes from '../../redux/actions/ActionTypes';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
-import { showToast } from '../../utils';
+import { showToast, isOrderTimeOpen, ORDER_TIME_TEXT } from '../../utils';
 import OrderButton from '../../components/Buttons/OrderButton';
 import messaging from '@react-native-firebase/messaging';
 import notificationService from './notificationService';
@@ -104,19 +104,24 @@ function Cart(props) {
     })
   }
 
-  const [delRecord, setData] = useState()
-  
     const deleteRecord = (data,index) => {
-      const item = data.cart
-      const checkVal = item.splice(index,1)
-      setData(checkVal);
+      dispatch({type:actionTypes.REMOVE_FROM_CART,index})
     };
+  // ADD_TO_CART replaces an item already in the cart, so it doubles as "update quantity"
+  const changeQty = (item, QTY) => {
+    if (QTY < 1 || QTY > 99) {
+      return
+    }
+    dispatch({type:actionTypes.ADD_TO_CART,payload:item,notes:item.notes,QTY})
+  }
   const _renderItem = ({item,index}) =>  {
+    const qty = Number(item.QTY) || 1
     return(
      <OrderCart
      data={item}
-     key={item.id}
      onPress={()=>deleteRecord(props,index)}
+     onIncrease={()=>changeQty(item, qty + 1)}
+     onDecrease={()=>changeQty(item, qty - 1)}
      />
     )
   }
@@ -141,9 +146,10 @@ function Cart(props) {
           }
           console.log("firestoreOrders",orderDetail)
           firestore().collection('orderList').add({
-        
+
               orderDetail:orderDetail,
-            
+              createdAt: firestore.FieldValue.serverTimestamp(),
+
           })
         firestore().collection('adminToken').get().then(querySnap=>{
         querySnap.docs.map(async docSnap=>{
@@ -170,59 +176,77 @@ function Cart(props) {
         })
    
   }
-  const orderList = cartData.GeneralReducer
-  const current = new Date();
-    const currentHour = current.getHours();
+  const cart = (cartData.GeneralReducer && cartData.GeneralReducer.cart) || []
+  const orderOpen = isOrderTimeOpen()
+  const itemCount = cart.reduce((sum, item) => sum + (Number(item.QTY) || 1), 0)
+  const total = cart.reduce((sum, item) => sum + Number(item.price || 0) * (Number(item.QTY) || 1), 0)
+
+  const placeOrder = () => {
+    if( !isOrderTimeOpen() ){
+      return showToast(`Orders are closed. Order between ${ORDER_TIME_TEXT}`);
+    }
+    _sendNotification({props,item:cart})
+    dispatch({type:actionTypes.CHECK_OUT,payload:''})
+    showToast('Order placed successfully')
+    navigation.navigate('HistoryStack', { screen: 'History' })
+  }
+
   return (
     <View style={styles.mainContainer}>
-        <TouchableOpacity style={styles.backArrow}
-          activeOpacity={.9}
-          onPress={()=>{
-          navigation.navigate('OurProudct',{
-            all_product_list:props.all_product_list
-          })
-        }}
-        >
-        <Image source={icons.previous} style={styles.backArrowSize}/>
-        </TouchableOpacity>
-      {!!orderList && !!orderList.cart && orderList.cart.length > 0
+      {cart.length > 0
       ?
-      <FlatList 
-      data={orderList.cart}
-      contentContainerStyle={{ paddingBottom: 70 }}
+      <FlatList
+      data={cart}
+      contentContainerStyle={styles.listContent}
+      showsVerticalScrollIndicator={false}
       renderItem={_renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item, index) => `${item.id}-${index}`}
+      ListHeaderComponent={
+        <Text style={styles.listTitle}>{itemCount} {itemCount === 1 ? 'item' : 'items'} in your cart</Text>
+      }
       ListFooterComponent={
-        <OrderButton 
-          title={'Checkout'} 
-          onPress={() =>{
-            if( currentHour >= 9 && currentHour <=23){
-              const item = cartData.GeneralReducer.cart;
-              _sendNotification({props,item})
-              dispatch({type:actionTypes.CHECK_OUT,payload:''})
-             
-              setTimeout(() => {
-              navigation.navigate('History')
-            }, 1000);
-            }
-            else
-            {
-              return showToast("We can't received your orders right now");
-            }
-           
-        }} 
-          mainContainerStyle={styles.checkOutBtn}
-        />
+        <View>
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryTitle}>Bill Summary</Text>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Items ({itemCount})</Text>
+              <Text style={styles.summaryValue}>Rs {total}</Text>
+            </View>
+            <View style={[styles.summaryRow, styles.totalRow]}>
+              <Text style={styles.totalLabel}>Total</Text>
+              <Text style={styles.totalValue}>Rs {total}</Text>
+            </View>
+          </View>
+          {!orderOpen && (
+            <View style={styles.closedBanner}>
+              <Text style={styles.closedText}>Orders are closed now. Order between {ORDER_TIME_TEXT}</Text>
+            </View>
+          )}
+          <TouchableOpacity
+            style={[styles.placeOrderBtn, !orderOpen && styles.placeOrderBtnDisabled]}
+            activeOpacity={0.85}
+            onPress={placeOrder}
+          >
+            <Text style={styles.placeOrderText}>Place Order</Text>
+            <Text style={styles.placeOrderAmount}>Rs {total}</Text>
+          </TouchableOpacity>
+        </View>
       }
       />
       :
       <View style={styles.noDataView}>
         <Image source={icons.emptyBaskey} style={styles.hungryIcon}/>
-        <Text style={styles.hungryText}>Hungry?</Text>
-        <Text style={styles.emptyText}>You haven't selected anything yet!</Text>
+        <Text style={styles.hungryText}>Your cart is empty</Text>
+        <Text style={styles.emptyText}>Add something delicious from today's menu</Text>
+        <TouchableOpacity
+          style={styles.browseBtn}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('HomeStack', { screen: 'OurProudct' })}
+        >
+          <Text style={styles.browseText}>Browse Menu</Text>
+        </TouchableOpacity>
       </View>
-      } 
-     
+      }
      </View>
   );
 }

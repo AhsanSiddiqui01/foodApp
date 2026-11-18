@@ -1,142 +1,106 @@
-
-import React from 'react'
-import { View, Text,RefreshControl,Image } from 'react-native'
-import { useEffect,useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { View, Text, Image, FlatList } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import styles from './styles'
-import { ScrollView } from 'react-native-gesture-handler'
-import { vh } from '../../utils/Units'
+import { getFoodImage, icons } from '../../assets/images'
+
+// Same "m/d/yy" format the checkout screen saves as orderDetail.date
+const todayString = () => {
+  const now = new Date();
+  return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear().toString().substr(-2);
+}
+
+// Kitchen summary: how many of each dish were ordered today
 function TotalOrders() {
   const [posts,setPosts] = useState([])
-  // const [refresh,setRefresh] = useState(false)
-  const [finalData, setFinalData] = useState([])
-  // console.log('checkpoisstt',posts)
-    
-  // const pullMe = () => {
-  //   setRefresh(true)
-  //   setTimeout(() => {
-  //     setRefresh(false)
-  //   }, 1000);
-  // }
 
-  var todayDate = new Date();
-  var dd = todayDate.getDate();
-  var mm = todayDate.getMonth()+1; 
-  var twoDigitYear = new Date().getFullYear().toString().substr(-2)
-  todayDate = mm+'/'+dd+'/'+twoDigitYear;
-
-  const itemList = posts
-
-
- var result = [];
-
-const checkTotal = async () => {
-    itemList.map(items => {
-        const single = items.userOrder
-        console.log('singletime',single)
-        const findDate = items.date
-        // var result = [];
-        {findDate == todayDate?
-          single.forEach(function (a) {
-          if (!this[a.name]) {
-              this[a.name] = { 
-                            //   "id":a.id, 
-                            //   "description": a.description,
-                              "name": a.name,
-                              "QTY":0,
-                              "price": a.price,
-                            //   "shop": a.shop,
-                            //   "notes": a.notes,
-                              "image": a.image 
-                            };
-              result.push(this[a.name]);
-          }
-          this[a.name].QTY += a.QTY;
-          this[a.name].image = a.image;
-          this[a.name].price = a.price;
-        }, Object.create(null))
-        :
-        null
-        }
-    })
-}
-
-const FinalResult = () => {
-  var resultF = [];
-    result.forEach(function (a) {
-        if (!this[a.name]) {
-            this[a.name] = { name: a.name, QTY: 0,image: a.image,price:a.price };
-            resultF.push(this[a.name]);
-        }
-        this[a.name].QTY += a.QTY;
-        this[a.name].image = a.image;
-        this[a.name].price = a.price;
-    }, Object.create(null));
-         console.log('otherreust',resultF)
-         setFinalData(resultF);
-}
+  // Listen to orders once; onSnapshot keeps the totals live when new orders arrive
   useEffect(()=>{
-    checkTotal()
-    FinalResult()
-    getUserOrder()
-        },[FinalResult]) 
-  
-  const getUserOrder = async () => {
-  
-    const list = []
-    await firestore().collection('orderList').orderBy('orderDetail','desc').get()
-   .then((querySnapShot) => {
-     querySnapShot.forEach(doc => {
-       const detailsss = doc.data().orderDetail
-       const {time,date,userId,userName,userOrder}  = detailsss
-       list.push({
-         time,
-         date,
-         userName,
-         userId,
-         userOrder
-       })
-     })
-     setPosts(list)
-   }) 
-       
-     }
+    const unsubscribe = firestore().collection('orderList')
+    .onSnapshot((querySnapShot) => {
+      setPosts(querySnapShot.docs.map((doc) => doc.data().orderDetail))
+    }, (error) => console.log('TotalOrders error', error))
+    return unsubscribe
+  },[])
 
-    
-     
-  return (
-    <View> 
-        <View style={styles.container}> 
-          <View style={styles.headingStyle}>
-            <Text style={styles.listHeading}>Food</Text>
-          </View>
-          <View style={styles.headingStyle}>
-            <Text style={styles.listHeading}>Quantity</Text>
-          </View>
+  const today = todayString()
+  const { dishes, totalItems, totalAmount, orderCount } = useMemo(() => {
+    const byName = {}
+    const todays = posts.filter((order) => order && order.date === today)
+    todays.forEach((order) => {
+      (order.userOrder || []).forEach((food) => {
+        const qty = Number(food.QTY) || 1
+        if (!byName[food.name]) {
+          byName[food.name] = { name: food.name, image: food.image, price: Number(food.price || 0), QTY: 0 }
+        }
+        byName[food.name].QTY += qty
+      })
+    })
+    const list = Object.values(byName).sort((a, b) => b.QTY - a.QTY)
+    return {
+      dishes: list,
+      totalItems: list.reduce((sum, dish) => sum + dish.QTY, 0),
+      totalAmount: list.reduce((sum, dish) => sum + dish.QTY * dish.price, 0),
+      orderCount: todays.length,
+    }
+  }, [posts, today])
+  const maxQty = dishes.length > 0 ? dishes[0].QTY : 1
+
+  const renderHeader = () => (
+    <View style={styles.hero}>
+      <Text style={styles.heroLabel}>Today's Kitchen Order</Text>
+      <Text style={styles.heroDate}>{today}  •  {orderCount} {orderCount === 1 ? 'order' : 'orders'}</Text>
+      <View style={styles.heroStats}>
+        <View style={styles.heroStat}>
+          <Text style={styles.heroValue}>{totalItems}</Text>
+          <Text style={styles.heroStatLabel}>Total Items</Text>
         </View>
-    
-    {/* <ScrollView  contentContainerStyle={{paddingBottom:16 * vh}} refreshControl={<RefreshControl refreshing={refresh} onRefresh={()=>pullMe()}/>}>  */}
-    <ScrollView  contentContainerStyle={{paddingBottom:16 * vh}}>
-    {finalData.length === 0
-        ? null
-        : finalData.map((item) => (
-          <View style={styles.container} >
-            <View style={[styles.item,styles.mainContainer]}>
-            <Image source={{uri:item.image}} 
-            resizeMode='cover'
-            style={styles.imgContainer}/>
-              <Text style={styles.itemName}>
-              {item.name} 
-            </Text>
-            </View>
-            <View style={[styles.quantityCenter,styles.mainContainer]}>
-              <Text style={styles.itemQuantity}>
-              {item.QTY} 
-            </Text>
-            </View>
-            </View>
-          ))}
-    </ScrollView>
+        <View style={styles.heroDivider}/>
+        <View style={styles.heroStat}>
+          <Text style={styles.heroValue}>{dishes.length}</Text>
+          <Text style={styles.heroStatLabel}>Dishes</Text>
+        </View>
+        <View style={styles.heroDivider}/>
+        <View style={styles.heroStat}>
+          <Text style={styles.heroValue} numberOfLines={1}>Rs {totalAmount}</Text>
+          <Text style={styles.heroStatLabel}>Amount</Text>
+        </View>
+      </View>
+    </View>
+  )
+
+  const renderDish = ({ item, index }) => (
+    <View style={styles.dishCard}>
+      <Text style={styles.rank}>{index + 1}</Text>
+      <Image source={getFoodImage(item.image)} resizeMode='cover' style={styles.dishImage}/>
+      <View style={styles.dishInfo}>
+        <Text style={styles.dishName} numberOfLines={1}>{item.name}</Text>
+        <Text style={styles.dishPrice}>Rs {item.price} each  •  Rs {item.price * item.QTY}</Text>
+        <View style={styles.barTrack}>
+          <View style={[styles.barFill, { width: `${Math.max(8, (item.QTY / maxQty) * 100)}%` }]}/>
+        </View>
+      </View>
+      <Text style={styles.dishQty}>x{item.QTY}</Text>
+    </View>
+  )
+
+  return (
+    <View style={styles.screen}>
+      <FlatList
+        data={dishes}
+        keyExtractor={(item) => item.name}
+        renderItem={renderDish}
+        ListHeaderComponent={renderHeader}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={styles.emptyView}>
+            <Image source={icons.orderCart} style={styles.emptyIcon}/>
+            <Text style={styles.emptyTitle}>Nothing ordered today</Text>
+            <Text style={styles.emptyText}>Item totals will appear as orders come in</Text>
+          </View>
+        }
+      />
     </View>
   )
 }

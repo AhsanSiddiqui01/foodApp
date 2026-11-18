@@ -1,42 +1,48 @@
-import React,{useEffect} from 'react';
-import {Image, TouchableOpacity,Alert,Text} from 'react-native';
+import React from 'react';
+import {Image, TouchableOpacity, View} from 'react-native';
 import PoppinsRegular from '../../Text/PoppinsRegular';
+import PoppinsMedium from '../../Text/PoppinsMedium';
 import styles from './styles'
+import { getFoodImage, icons } from '../../../assets/images';
 import { useNavigation } from '@react-navigation/native';
 
 const ProductCard = (props) => {
-
-  //Dynamically Change Cart Color Fuction
-  const randomColor = () => {
-      const red   = Math.floor(Math.random() * 230)
-      const blue  = Math.floor(Math.random() * 200)
-      const green = Math.floor(Math.random() * 150)
-      return `rgb(${red},${green},${blue})`
-  }
-
   const navigation = useNavigation();
-  return ( 
+  const item = props.foodList.item;
+  const openDetail = () => {
+    navigation.navigate('ProductDetail',{
+      foodList:item
+    })
+  };
+  return (
   <TouchableOpacity
-      style={[styles.container]}
-      // style={[styles.container,{backgroundColor: randomColor()}]}
-      onPress={()=>{
-        navigation.navigate('ProductDetail',{
-          foodList:props.foodList.item
-        })
-      }}
+      style={styles.container}
+      activeOpacity={0.85}
+      onPress={openDetail}
       >
       <Image
-      resizeMode='cover'
+        resizeMode='cover'
         style={styles.imgContainer}
-        source={{uri: props.foodList?.item.image}}
+        source={getFoodImage(item.image)}
       />
-
-        <PoppinsRegular
-          style={styles.circularBoardStyle}
-          numberOfLines={1}>
-         {props.foodList.item.name}
-        </PoppinsRegular>
-      
+      <View style={styles.info}>
+        <PoppinsMedium style={styles.name} numberOfLines={1}>
+          {item.name}
+        </PoppinsMedium>
+        {!!item.shop && (
+          <PoppinsRegular style={styles.shop} numberOfLines={1}>
+            {item.shop}
+          </PoppinsRegular>
+        )}
+        <View style={styles.footer}>
+          <PoppinsMedium style={styles.price}>
+            Rs {item.price}
+          </PoppinsMedium>
+          <TouchableOpacity style={styles.addButton} activeOpacity={0.8} onPress={openDetail}>
+            <Image source={icons.plusWhite} style={styles.addIcon}/>
+          </TouchableOpacity>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 };

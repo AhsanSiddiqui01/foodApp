@@ -104,6 +104,13 @@ case actionTypes.ADD_TO_CART:
       
   }
 
+//remove one cart line by index
+case actionTypes.REMOVE_FROM_CART:
+  return{
+    ...state,
+    cart: state.cart.filter((item, index) => index !== action.index),
+  }
+
 //checkout list
 case actionTypes.CHECK_OUT:
     return{

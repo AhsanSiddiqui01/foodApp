@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {View, Modal, ActivityIndicator,Image} from 'react-native';
+import {View, Modal, ActivityIndicator} from 'react-native';
 import styles from './styles';
 
 import TextRegular from '../TextRegular';
 import {connect} from 'react-redux';
-import { icons } from '../../assets/images';
 
 class Loader extends Component {
 
@@ -18,15 +17,8 @@ class Loader extends Component {
         animationType="fade">
         <View style={styles.modalTouchable}>
           <View style={styles.imageBg}>
-            <View style={styles.container}>
-              <ActivityIndicator size="small" color="black" />
-              <Image source={icons.loadingIcon} style={styles.backArrow}/>
-      
-            </View>
-            <View style={styles.container}>
-              <TextRegular style={styles.text}>wait please... </TextRegular>
-            <Image source={icons.coolIcon} style={styles.smartIcon}/>
-              </View>
+            <ActivityIndicator size="large" color="#1458C4" />
+            <TextRegular style={styles.text}>Please wait</TextRegular>
           </View>
         </View>
       </Modal>

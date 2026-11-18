@@ -10,22 +10,39 @@ const styles = StyleSheet.create({
 
   },
   title: {
-    width: 80 * vw,
-    fontSize: 2.8 * vh,
-    color: ThemeColors.primary,
-    marginBottom: 6 * vh,
-    marginTop: 6 * vh
+    width: 84 * vw,
+    fontSize: 3.4 * vh,
+    color: ThemeColors.backgroundBlack,
+    marginTop: 4 * vh,
+  },
+  subtitle: {
+    width: 84 * vw,
+    fontSize: 1.8 * vh,
+    color: ThemeColors.fontLightGrey,
+    marginTop: 0.5 * vh,
+    marginBottom: 4 * vh,
   },
   timeStyle:{
     alignItems:'center',
+    alignSelf:'center',
+    paddingVertical: 1.2 * vh,
+    paddingHorizontal: 5 * vw,
+    borderRadius: 20,
+    backgroundColor: '#E8F0FD',
+  },
+  timeStyleClosed:{
+    backgroundColor: '#FDECEC',
   },
   timeTextActive:{
     color: ThemeColors.primary,
+    fontSize: 1.6 * vh,
   },
   timeTextInactive:{
     color: ThemeColors.errorRed,
+    fontSize: 1.6 * vh,
   },
   field: {
+    width: 84 * vw,
     marginBottom: 2 * vh,
   },
   forgotText: {
@@ -36,7 +53,9 @@ const styles = StyleSheet.create({
     color: '#2A73BA',
   },
   button: {
-    marginVertical: 3 * vh,
+    width: 84 * vw,
+    marginTop: 2 * vh,
+    marginBottom: 3 * vh,
   },
   forgotButton: { marginTop: 1 * vh },
   footerText: {

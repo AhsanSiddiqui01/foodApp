@@ -9,14 +9,15 @@ import MainInput from '../../components/Input/MainInput';
 import GradientButton from '../../components/Buttons/GradientButton';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions/index';
-import { showToast } from '../../utils';
+import { showToast, isOrderTimeOpen, ORDER_TIME_TEXT } from '../../utils';
 import firestore from '@react-native-firebase/firestore'
 import messaging from '@react-native-firebase/messaging';
+import { icons } from '../../assets/images';
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      email: '',
       password: '',
       id:'',
       apcontrol:'',
@@ -28,8 +29,8 @@ class LoginScreen extends Component {
   }
   _onLogin = () => {
     // console.log('WORKING',apcontrol)
-    if (this.state.name.trim() == '') {
-      return showToast('Please enter your user name');
+    if (this.state.email.trim() == '') {
+      return showToast('Please enter your email');
     }
     if (this.state.password.trim() == '') {
       return showToast('Please enter your password');
@@ -51,7 +52,7 @@ class LoginScreen extends Component {
             time:this.state.time,
             date:this.state.date,
             id:success.id,
-            name:this.state.name,
+            name:success.name,
             apcontrol:success.apcontrol
           })
           messaging()
@@ -71,12 +72,12 @@ class LoginScreen extends Component {
             time:this.state.time,
             date:this.state.date,
             id:success.id,
-            name:this.state.name,
+            name:success.name,
             apcontrol:success.apcontrol
           })
         }
         showToast(success.mess);
-        this.setState({ name: '', password: '' });
+        this.setState({ email: '', password: '' });
         // console.log('propsssapcontrol',success.apcontrol)
         {success.apcontrol == 1 ? 
           this.props.navigation.navigate('OrderTabs')
@@ -117,25 +118,30 @@ class LoginScreen extends Component {
     );
   };
   render() {
-    var current = new Date();
-        var currentHour = current.getHours();
-        // console.log('logHourr',currentHour)
     return (
       <View>
         <AuthContainer title="Login" footer={this.renderFooter()}>
         <View style={styles.container}>
 
           <CircularBold style={styles.title}>
-            Log in to your account
+            Welcome Back!
           </CircularBold>
+          <PoppinsRegular style={styles.subtitle}>
+            Log in to order your favourite lunch
+          </PoppinsRegular>
           <MainInput
-            placeholder="Enter User Name"
+            placeholder="Enter Email"
+            leftIcon={icons.mail}
             style={styles.field}
-            value={this.state.name}
-            onChangeText={(name) => this.setState({ name })}
+            value={this.state.email}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(email) => this.setState({ email })}
           />
           <MainInput
             placeholder="Enter Password"
+            leftIcon={icons.lock}
             style={styles.field}
             onChangeText={(t) => this.setState({ password: t })}
             value={this.state.password}
@@ -147,17 +153,17 @@ class LoginScreen extends Component {
             title={'Login'}
           />
             {
-            currentHour >= 9 && currentHour <= 23? 
+            isOrderTimeOpen() ?
             <View style={styles.timeStyle}>
-            <Text style={styles.timeTextActive}>Order Between 9:00 AM TO 01:00 PM</Text>
+            <Text style={styles.timeTextActive}>Order Between {ORDER_TIME_TEXT}</Text>
               
             {/* <Text style={styles.timeText}>Time Left</Text>
             <CountDown size={20} until={10800} timeToShow={['H','M','S']}/> */}
             </View>
             :
-            <View style={styles.timeStyle}>
-            <Text style={styles.timeTextInactive}>Service Not Avaiable</Text>
-            <Text style={styles.timeTextInactive}>Receive Orders Only 9:00 AM TO 12:00 PM</Text>
+            <View style={[styles.timeStyle, styles.timeStyleClosed]}>
+            <Text style={styles.timeTextInactive}>Service Not Available</Text>
+            <Text style={styles.timeTextInactive}>Order Between {ORDER_TIME_TEXT}</Text>
             </View>
             }
       </View>

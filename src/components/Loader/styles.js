@@ -9,7 +9,7 @@ import { vh,vw } from './../../utils/Units';
 export default styles = StyleSheet.create({
  
         modalTouchable:{
-            backgroundColor: "rgba(0,0,0,.5)", 
+            backgroundColor: "rgba(21,34,43,.35)",
             alignItems: 'center', 
             justifyContent: 'center',
             flex:1,
@@ -36,21 +36,17 @@ export default styles = StyleSheet.create({
         BtnContainer:{marginTop:vh*3,width:"50%"},
         cross:{width:vw*3,height:vh*2},
         imageBg:{
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              // height: 30*vh,
-            },
-            shadowOpacity: 0.29,
-            shadowRadius: 4.65,
-            borderRadius: vw * 2,
-            elevation: 7, width: vw * 70, backgroundColor: "white",
-
-            // paddingBottom:vh*3,
-             minHeight:vh*12,
-             alignItems:"center",
-             justifyContent:"center"  
-
+            shadowColor: "#1458C4",
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.2,
+            shadowRadius: 16,
+            borderRadius: 20,
+            elevation: 10,
+            width: vw * 34,
+            height: vw * 34,
+            backgroundColor: "white",
+            alignItems:"center",
+            justifyContent:"center"
           },
           crossContainer:{
             alignItems:"flex-end",
@@ -76,7 +72,7 @@ export default styles = StyleSheet.create({
 
           container:{alignItems:"center",justifyContent:"center",flexDirection:"row"},
           checkMark:{width:vw*10,height:vh*5,marginBottom:vh*1},
-          text:{fontSize:vh*2.2,textAlign:"center",color:"#333333",marginLeft:2*vw},
+          text:{fontSize:vh*1.7,textAlign:"center",color:ThemeColors.fontDarkGrey,marginTop:1.5*vh},
           btnsContainer:{flexDirection:"row",justifyContent:"space-between",marginTop:vh*3,width:"80%"},
           yesBtn:{backgroundColor:"#92278F",width:"44%",height:vh*5.4},
           noBtn:{width:"44%",backgroundColor:"#FFFFFF",color:"#92278F",borderWidth:vw*.3,borderColor:"#92278F",height:vh*5.4},

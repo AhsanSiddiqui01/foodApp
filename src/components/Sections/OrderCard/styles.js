@@ -1,54 +1,100 @@
 import { vh, vw } from "../../../utils/Units";
+import { fonts } from "../../../assets/fonts";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
+const BLUE = '#1458C4';
 const styles = StyleSheet.create({
-    mainContainer: {
+    card: {
         width: 92 * vw,
-        elevation: 10,
-        padding: 3 * vw,
-        flexDirection:'row',
+        alignSelf: 'center',
+        flexDirection: 'row',
         backgroundColor: 'white',
-        marginHorizontal: 4 * vw,
-        marginTop: 2 * vh,
-        marginBottom: 1 * vh,
-        borderRadius: 2 * vw,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 5,
-            height: 3,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 15,
-
+        borderRadius: 18,
+        padding: 3 * vw,
+        marginBottom: 1.5 * vh,
+        elevation: 3,
+        shadowColor: BLUE,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
-    imgContainer: {
-        height: 75, width: 75, borderRadius: 1 * vw
+    image: {
+        width: 22 * vw,
+        height: 22 * vw,
+        borderRadius: 14,
     },
-    container2: {
-        marginTop: 2 * vh, marginLeft: 3 * vw, width: 70 * vw,
+    info: {
+        flex: 1,
+        marginLeft: 3.5 * vw,
+        justifyContent: 'space-between',
     },
-    circularBoardStyle: {
-        color: ThemeColors.white,
-        fontSize: 4 * vw,
-        marginLeft:1*vw,
-        fontWeight:"bold"
+    topRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
     },
-    heading: {
+    name: {
+        flex: 1,
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.9 * vh,
         color: ThemeColors.backgroundBlack,
-        fontSize: 2.3 * vw,
-        marginBottom: 0.5 * vh,
-        fontWeight:"bold"
+        marginRight: 2 * vw,
     },
-    name:{
-        fontSize:12,
-        fontWeight:'700',
-        color:'white',
-        marginLeft:10,
-        width:125,
-        flexDirection:'row'
+    trash: {
+        width: 5 * vw,
+        height: 5 * vw,
+        resizeMode: 'contain',
     },
-
+    notes: {
+        fontFamily: fonts.Poppins.regular,
+        fontSize: 1.4 * vh,
+        color: ThemeColors.fontLightGrey,
+    },
+    bottomRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    price: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 2 * vh,
+        color: ThemeColors.orderButton,
+    },
+    stepper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F5F7FB',
+        borderRadius: 20,
+        padding: 3,
+    },
+    stepperBtn: {
+        width: 7 * vw,
+        height: 7 * vw,
+        borderRadius: 3.5 * vw,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 1,
+    },
+    stepperBtnPrimary: {
+        backgroundColor: BLUE,
+    },
+    stepperText: {
+        fontSize: 2 * vh,
+        lineHeight: 2.4 * vh,
+        color: BLUE,
+    },
+    stepperTextPrimary: {
+        color: 'white',
+    },
+    qty: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.8 * vh,
+        color: ThemeColors.backgroundBlack,
+        minWidth: 8 * vw,
+        textAlign: 'center',
+    },
 })
 export default styles;

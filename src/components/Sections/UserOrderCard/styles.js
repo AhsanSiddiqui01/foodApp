@@ -1,140 +1,147 @@
 import { vh, vw } from "../../../utils/Units";
+import { fonts } from "../../../assets/fonts";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
+const BLUE = '#1458C4';
 const styles = StyleSheet.create({
-    mainContainer1: {
+    card: {
         width: 92 * vw,
-        elevation: 5,
-        padding: 3 * vw,
-        // flexDirection:'row',
+        alignSelf: 'center',
         backgroundColor: 'white',
-        marginHorizontal: 4 * vw,
-        marginTop: 2 * vh,
-        marginBottom: 1 * vh,
-        // borderRadius: 2 * vw,
-        // shadowColor: '#000',
-        shadowOffset: {
-            width: 5,
-            height: 3,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 15,
-
+        borderRadius: 18,
+        paddingHorizontal: 4 * vw,
+        paddingTop: 2 * vh,
+        paddingBottom: 1.5 * vh,
+        marginBottom: 2 * vh,
+        elevation: 3,
+        shadowColor: BLUE,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
-    mainContainer2: {
-        // width: 92 * vw,
-        // elevation: 10,
-        // padding: 3 * vw,
-        flexDirection:'row',
-        // backgroundColor: 'white',
-        // marginHorizontal: 4 * vw,
-        // marginTop: 2 * vh,
-        // marginBottom: 1 * vh,
-        // borderRadius: 2 * vw,
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //     width: 5,
-        //     height: 3,
-        // },
-        // shadowOpacity: 0.25,
-        // shadowRadius: 15,
-
-    },
-    orderByContainer: {
-        // width: 92 * vw,
-        elevation: 10,
-        padding: 3 * vw,
-        // flexDirection:'row',
-        // alignContent:'space-between',
-        // backgroundColor: 'white',
-        // marginHorizontal: 4 * vw,
-        marginTop: 2 * vh,
-        // marginBottom: 1 * vh,
-        // borderRadius: 2 * vw,
-        backgroundColor:ThemeColors.darkBlue,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 5,
-            height: 3,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 15,
-
-    },
-    orderTexttextField:{
-        // fontSize:12,
-        fontWeight:'700',
-        color:'white',
-        // marginLeft:10,
-        // width:'67%',
-        // flexDirection:'row'
-    },
-    imgContainer: {
-        height: 75, width: 75, borderRadius: 1 * vw
-    },
-    container2: {
-        marginTop: 2 * vh, marginLeft: 3 * vw, width: 70 * vw,
-    },
-    circularBoardStyle: {
-        color: ThemeColors.white,
-        fontSize: 4 * vw,
-        marginLeft:1*vw,
-        fontWeight:"bold"
-    },
-    heading: {
-        color: ThemeColors.backgroundBlack,
-        fontSize: 2.3 * vw,
-        marginBottom: 0.5 * vh,
-        fontWeight:"bold"
-    },
-    textUserName:{
-        fontSize:15,
-        fontWeight:'700',
-        color:'black',
-        marginLeft:10,
-        width:'100%',
-        flexDirection:'row'
-    },
-    textField:{
-        fontSize:12,
-        fontWeight:'700',
-        color:'black',
-        marginLeft:10,
-        width:'100%',
-        flexDirection:'row'
-    },
-    textFieldNotes:{
-        fontSize:12,
-        fontWeight:'700',
-        color:'black',
-        marginLeft:10,
-        // width:200,
-        // flexDirection:'row'
-    },
-    textArea:
-    {
-        width:65 * vw,
-        // backgroundColor:'red'
-    },
-    dateTime:{
-        marginLeft:20,
-        fontSize:20,
-        fontWeight:"bold",
-        color:'black',
-      },
-      inputField: {
-        marginTop: 0 * vh,
-        width: 80 * vw,
-        height: 5 * vh,
-        borderWidth: 0*vw,
-        backgroundColor: 'white',
+    header: {
         flexDirection: 'row',
         alignItems: 'center',
-        // alignSelf:'center'
-      },
-     
-
+        paddingBottom: 1.5 * vh,
+        marginBottom: 0.5 * vh,
+        borderBottomWidth: 1,
+        borderBottomColor: '#EEF1F6',
+    },
+    avatar: {
+        width: 11 * vw,
+        height: 11 * vw,
+        borderRadius: 5.5 * vw,
+        backgroundColor: '#E8F0FD',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    avatarText: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 2.2 * vh,
+        color: BLUE,
+    },
+    headerInfo: {
+        flex: 1,
+        marginLeft: 3 * vw,
+        marginRight: 2 * vw,
+    },
+    customer: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.9 * vh,
+        color: ThemeColors.backgroundBlack,
+    },
+    meta: {
+        fontFamily: fonts.Poppins.regular,
+        fontSize: 1.4 * vh,
+        color: ThemeColors.fontLightGrey,
+    },
+    countPill: {
+        backgroundColor: '#FFF1EC',
+        borderRadius: 20,
+        paddingHorizontal: 3 * vw,
+        paddingVertical: 0.6 * vh,
+    },
+    countText: {
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.4 * vh,
+        color: ThemeColors.orderButton,
+    },
+    itemBlock: {
+        paddingVertical: 0.8 * vh,
+    },
+    itemRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    itemImage: {
+        width: 12 * vw,
+        height: 12 * vw,
+        borderRadius: 12,
+    },
+    itemName: {
+        flex: 1,
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.8 * vh,
+        color: ThemeColors.backgroundBlack,
+        marginHorizontal: 3 * vw,
+    },
+    itemQty: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.6 * vh,
+        color: BLUE,
+        backgroundColor: '#E8F0FD',
+        borderRadius: 8,
+        paddingHorizontal: 2 * vw,
+        paddingVertical: 0.3 * vh,
+        overflow: 'hidden',
+        marginRight: 3 * vw,
+    },
+    itemPrice: {
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.7 * vh,
+        color: ThemeColors.backgroundBlack,
+        minWidth: 18 * vw,
+        textAlign: 'right',
+    },
+    notesBox: {
+        marginTop: 0.8 * vh,
+        marginLeft: 15 * vw,
+        backgroundColor: '#FFF8E1',
+        borderLeftWidth: 3,
+        borderLeftColor: '#F19C1C',
+        borderRadius: 8,
+        paddingHorizontal: 3 * vw,
+        paddingVertical: 0.6 * vh,
+    },
+    notesLabel: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.5 * vh,
+        color: '#B26A00',
+    },
+    notesText: {
+        fontFamily: fonts.Poppins.regular,
+        color: '#7A4A00',
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 0.5 * vh,
+        paddingTop: 1.5 * vh,
+        borderTopWidth: 1,
+        borderTopColor: '#EEF1F6',
+    },
+    footerLabel: {
+        fontFamily: fonts.Poppins.regular,
+        fontSize: 1.7 * vh,
+        color: ThemeColors.fontDarkGrey,
+    },
+    footerAmount: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 2.1 * vh,
+        color: ThemeColors.orderButton,
+    },
 })
 export default styles;

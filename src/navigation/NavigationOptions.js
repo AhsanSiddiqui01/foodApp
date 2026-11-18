@@ -51,12 +51,14 @@ export const getTitle = (activeRouteName) => {
 };
 
 
+// Profile/logout avatar sits top-right on every main tab screen, for users and admins alike
 export const showHeaderRight = (activeRouteName, navigation, onBackPress) => {
   switch (activeRouteName) {
     case 'OurProudct':
-    case 'ProductDetail':
+    case 'MenuScreen':
+    case 'History':
     case 'OrderList':
-    case 'TotalScreen':  
+    case 'TotalScreen':
       return renderLogoutButton();
     default:
       return false;

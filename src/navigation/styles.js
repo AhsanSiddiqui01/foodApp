@@ -6,12 +6,12 @@ const styles = StyleSheet.create({
   defaultHeaderTitleStyle: {
     color: 'white',
     fontFamily: fonts.circular.bold,
-    fontSize: 2.6 * vh,
-    paddingBottom: 2 * vh,
+    fontSize: 2.4 * vh,
+    paddingBottom: 1 * vh,
   },
   defaultHeaderTitleContainerStyle: {},
   defaultHeaderRightContainerStyle: {
-    paddingBottom: 2 * vh,
+    paddingBottom: 1 * vh,
     paddingRight: 5 * vw,
   },
   defaultHeaderLeftContainerStyle: {
@@ -19,7 +19,10 @@ const styles = StyleSheet.create({
     paddingLeft: 5 * vw,
   },
   deafultHeaderStyle: {
-    height: 13 * vh,
+    height: 11 * vh,
+    backgroundColor: 'transparent',
+    elevation: 0,
+    shadowOpacity: 0,
     // paddingBottom: 0 * vh,
   },
   seachBarStyle: {

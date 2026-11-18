@@ -21,8 +21,10 @@ const styles = StyleSheet.create({
         // height:20*vh,
         // width: 20*vw,
 
-        height:160,
-        width: 160,
+        // login_illustration.png is 490x420
+        width: 82 * vw,
+        height: 82 * vw * (420 / 490),
+        resizeMode: 'contain',
 
 top:3*vh,
         position: 'absolute',
@@ -45,9 +47,10 @@ top:3*vh,
 
         opacity: 0.2
     },
-    topOverlay: { 
-        height: Measurements.backgroundHeight + Measurements.backgroundTop, 
-        backgroundColor: 'transparent', 
+    topOverlay: {
+        // leaves room for the illustration above the login sheet
+        height: 82 * vw * (420 / 490) - 3 * vh,
+        backgroundColor: 'transparent',
         width: 100 * vw 
     },
     title:{

@@ -1,0 +1,61 @@
+rules_version = '2';
+
+// Paste into Firebase console > Firestore Database > Rules, then Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/userProfiles/$(request.auth.uid)).data.apcontrol == 1;
+    }
+
+    // Role of each user (apcontrol: 1 = admin, 0 = user). Managed from the console only.
+    match /userProfiles/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Menu items. Managed from the console only.
+    match /foodList/{itemId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    // Add-ons (cold drinks, sides). Managed from the console only.
+    match /extras/{itemId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    // Orders: users place them, admin manages them.
+    match /orderList/{orderId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.orderDetail.userId == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.orderDetail.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // Login logs and FCM tokens written by the app.
+    match /users/{docId} {
+      allow create: if signedIn();
+      allow read: if isAdmin();
+    }
+    match /adminLogin/{docId} {
+      allow create: if isAdmin();
+      allow read: if isAdmin();
+    }
+    match /userToken/{docId} {
+      allow create: if signedIn();
+      allow read: if isAdmin();
+    }
+    match /adminToken/{docId} {
+      allow create: if isAdmin();
+      allow read: if signedIn();
+    }
+  }
+}
