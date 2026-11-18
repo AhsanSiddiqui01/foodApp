@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles';
 import {Text} from 'react-native';
+import { themeColors } from '../../../theme';
 import Clipboard from '@react-native-community/clipboard';
 import { showToast } from '../../../utils';
 const TextHOC = (props) => {
@@ -11,7 +12,7 @@ const TextHOC = (props) => {
       adjustsFontSizeToFit={false}
       allowFontScaling={false}
       {...props}
-      style={[styles.font, props.style]}>
+      style={[{ color: themeColors().text }, styles.font, props.style]}>
       {props.children}
     </Text>
   );

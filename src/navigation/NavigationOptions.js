@@ -2,8 +2,11 @@ import React from 'react';
 import { TransitionPresets } from '@react-navigation/stack';
 import styles from './styles';
 import headerBackground from './headerBackground';
+import { View } from 'react-native';
 import MenuButton from '../components/Buttons/MenuButton';
+import { ThemeToggleButton } from '../components/Sections/ThemeSwitcher';
 import MainInput from '../components/Input/MainInput';
+import HeaderBrand from './HeaderBrand';
 export const getNavigationOptions = (props) => {
   var activeRouteName = props.route.state
     ? props.route.state.routes[props.route.state.index].name
@@ -25,6 +28,11 @@ export const shouldHeaderBeShown = (activeRouteName) => {
     case 'History':
     case 'OrderList':
     case 'TotalScreen':
+    case 'MenuManager':
+    case 'MenuItemForm':
+    case 'Users':
+    case 'UserForm':
+    case 'Settings':
       return true;
     default:
       return false;
@@ -34,17 +42,27 @@ export const getTitle = (activeRouteName) => {
 
   switch (activeRouteName) {
     case 'OurProudct':
-      return 'Select Food';
+      return () => <HeaderBrand />;
     case 'MenuScreen':
-      return 'Ready To Order';
+      return 'My Cart';
     case 'History':
       return 'My Orders';
     case 'ProductDetail':
       return 'Details';
     case 'OrderList':
-      return 'User Orders';
+      return 'Orders';
     case 'TotalScreen':
-        return 'Total Item'
+        return 'Kitchen Summary'
+    case 'MenuManager':
+      return 'Manage Menu';
+    case 'MenuItemForm':
+      return 'Menu Item';
+    case 'Users':
+      return 'Users';
+    case 'UserForm':
+      return 'Add User';
+    case 'Settings':
+      return 'Settings';
     default:
       return 'No Heading';
   }
@@ -59,6 +77,9 @@ export const showHeaderRight = (activeRouteName, navigation, onBackPress) => {
     case 'History':
     case 'OrderList':
     case 'TotalScreen':
+    case 'MenuManager':
+    case 'Users':
+    case 'Settings':
       return renderLogoutButton();
     default:
       return false;
@@ -75,8 +96,12 @@ export const showSearchMenuItem = (activeRouteName) => {
 };
 
 const renderLogoutButton = () => {
+  // dark-mode toggle + profile avatar, for every user
   return (
-    <MenuButton/>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <ThemeToggleButton/>
+      <MenuButton/>
+    </View>
   );
 };
 const searchingMenu = () => {
@@ -93,12 +118,14 @@ export const defaultOptions = (activeRouteName, navigation) => {
     ...TransitionPresets.SlideFromRightIOS,
     headerRight:  () => showHeaderRight(activeRouteName, navigation),
     headerSearch: () => showSearchMenuItem(activeRouteName),
-    headerTitleAlign: 'center',
+    headerTitleAlign: 'left',
     headerTitleStyle: styles.defaultHeaderTitleStyle,
-    // headerTitleContainerStyle: styles.defaultHeaderTitleContainerStyle,
+    headerTitleContainerStyle: styles.defaultHeaderLeftContainerStyle,
     headerRightContainerStyle: styles.defaultHeaderRightContainerStyle,
     // headerLeftContainerStyle: styles.defaultHeaderLeftContainerStyle,
     headerStyle: styles.deafultHeaderStyle,
+    // white back arrow on the blue header
+    headerTintColor: 'white',
 
   };
 };

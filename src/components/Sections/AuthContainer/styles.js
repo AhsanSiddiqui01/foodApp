@@ -1,14 +1,16 @@
+import { themed } from '../../../theme';
 import Measurements from "../../../utils/Measurements";
 import { vh, vw } from "../../../utils/Units";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     container: {
         // flex: 1,
         // backgroundColor: ThemeColors.backgroundBlack
-        backgroundColor:'#ffffff'
+        backgroundColor: c.card
         // backgroundColor:'yellow'
     },
     scroll:{ 
@@ -54,7 +56,7 @@ top:3*vh,
         width: 100 * vw 
     },
     title:{
-        color:ThemeColors.darkBlue,
+        color: c.primary,
         marginTop:0.5*vh,
         fontSize:3*vh,
         marginLeft:Measurements.marginLeft
@@ -62,7 +64,7 @@ top:3*vh,
     sheetContainer:{
         width: 100 * vw, 
         minHeight: 100 * vh - (Measurements.backgroundHeight + Measurements.backgroundTop), 
-        backgroundColor: 'white', 
+        backgroundColor: c.card, 
         marginTop: 5 * vh, 
         borderTopRightRadius: 10 * vw, 
         borderTopLeftRadius: 10 * vw, 
@@ -73,7 +75,7 @@ top:3*vh,
         position: 'absolute',
         left: 5 * vw,
         top: 10 * vw,
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         width: 8 * vw,
         height: 8 * vw,
         borderRadius: 4 * vw,
@@ -82,4 +84,4 @@ top:3*vh,
     },
     logo:{ height: 5 * vh, width: 50 * vw, marginVertical: 5 * vh, resizeMode: 'contain' }
 })
-export default styles
+export default themed(makeStyles);

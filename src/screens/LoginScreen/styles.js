@@ -1,7 +1,9 @@
+import { themed } from '../../theme';
 const { StyleSheet } = require('react-native');
 import ThemeColors from '../../utils/ThemeColors';
 import { vh,vw } from '../../utils/Units';
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
   container: {
     flex: 1,
     // alignSelf:'center',
@@ -12,13 +14,13 @@ const styles = StyleSheet.create({
   title: {
     width: 84 * vw,
     fontSize: 3.4 * vh,
-    color: ThemeColors.backgroundBlack,
+    color: c.text,
     marginTop: 4 * vh,
   },
   subtitle: {
     width: 84 * vw,
     fontSize: 1.8 * vh,
-    color: ThemeColors.fontLightGrey,
+    color: c.textMuted,
     marginTop: 0.5 * vh,
     marginBottom: 4 * vh,
   },
@@ -28,17 +30,21 @@ const styles = StyleSheet.create({
     paddingVertical: 1.2 * vh,
     paddingHorizontal: 5 * vw,
     borderRadius: 20,
-    backgroundColor: '#E8F0FD',
+    backgroundColor: c.primarySoft,
   },
   timeStyleClosed:{
-    backgroundColor: '#FDECEC',
+    backgroundColor: c.dangerSoft,
   },
   timeTextActive:{
-    color: ThemeColors.primary,
+    color: c.primary,
     fontSize: 1.6 * vh,
   },
+  timeSchedule:{
+    fontWeight: '700',
+    marginBottom: 0.3 * vh,
+  },
   timeTextInactive:{
-    color: ThemeColors.errorRed,
+    color: c.danger,
     fontSize: 1.6 * vh,
   },
   field: {
@@ -59,17 +65,17 @@ const styles = StyleSheet.create({
   },
   forgotButton: { marginTop: 1 * vh },
   footerText: {
-    color: ThemeColors.fontLightGrey,
+    color: c.textMuted,
     fontSize: 2.3 * vh,
   },
   footerTextBlue: {
-    color: ThemeColors.primary,
+    color: c.primary,
     fontSize: 2.3 * vh,
   },
   buttonStyle: {
     backgroundColor: '#7DE24E',
     borderWidth: 0,
-    color: '#FFFFFF',
+    color: c.onPrimary,
     borderColor: '#7DE24E',
     height: 40,
     alignItems: 'center',
@@ -80,9 +86,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   buttonTextStyle: {
-    color: '#FFFFFF',
+    color: c.onPrimary,
     paddingVertical: 10,
     fontSize: 16,
   },
 });
-export default styles;
+export default themed(makeStyles);

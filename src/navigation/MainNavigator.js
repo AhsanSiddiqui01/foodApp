@@ -6,6 +6,8 @@ import HomeTabs from './HomeTabs';
 import AuthNavigator from './AuthNavigator'
 import { getNavigationOptions } from './NavigationOptions';
 import OrderTabs from './OrderTabs';
+import AdminTabs from './AdminTabs';
+import { isAdmin, isStaff } from '../utils/roles';
 const MainStack = createStackNavigator();
 const MainStackNavigator = (props) => {
 
@@ -35,14 +37,14 @@ const MainStackNavigator = (props) => {
 
 
      {props.props.GeneralReducer.access_token == null && (  <MainStack.Screen component={AuthNavigator} name="AuthNavigator" />)}
-    {props.props.GeneralReducer.access_token && 
-    props.props.GeneralReducer.apcontrol == 1 ? 
-    <MainStack.Screen component={OrderTabs} name="OrderTabs" />
-     :
-    props.props.GeneralReducer.access_token &&
-    <MainStack.Screen component={HomeTabs} name="HomeTabs" />
-    
-    }
+    {/* Signed-in users land on the tabs for their role */}
+    {props.props.GeneralReducer.access_token && (
+      isAdmin(props.props.GeneralReducer.apcontrol)
+        ? <MainStack.Screen component={AdminTabs} name="AdminTabs" />
+        : isStaff(props.props.GeneralReducer.apcontrol)
+          ? <MainStack.Screen component={OrderTabs} name="OrderTabs" />
+          : <MainStack.Screen component={HomeTabs} name="HomeTabs" />
+    )}
 
       {/* <MainStack.Screen component={SignupScreen} name="SignupScreen" /> */}
       {/* <MainStack.Screen component={LoginScreen} name="LoginScreen" /> */}

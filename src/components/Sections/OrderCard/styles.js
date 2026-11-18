@@ -1,21 +1,22 @@
+import { themed } from '../../../theme';
 import { vh, vw } from "../../../utils/Units";
 import { fonts } from "../../../assets/fonts";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
-const BLUE = '#1458C4';
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     card: {
         width: 92 * vw,
         alignSelf: 'center',
         flexDirection: 'row',
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         borderRadius: 18,
         padding: 3 * vw,
         marginBottom: 1.5 * vh,
         elevation: 3,
-        shadowColor: BLUE,
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 1.9 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
         marginRight: 2 * vw,
     },
     trash: {
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     notes: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.4 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
     },
     bottomRow: {
         flexDirection: 'row',
@@ -60,12 +61,12 @@ const styles = StyleSheet.create({
     price: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2 * vh,
-        color: ThemeColors.orderButton,
+        color: c.accent,
     },
     stepper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F5F7FB',
+        backgroundColor: c.background,
         borderRadius: 20,
         padding: 3,
     },
@@ -73,28 +74,28 @@ const styles = StyleSheet.create({
         width: 7 * vw,
         height: 7 * vw,
         borderRadius: 3.5 * vw,
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 1,
     },
     stepperBtnPrimary: {
-        backgroundColor: BLUE,
+        backgroundColor: c.primary,
     },
     stepperText: {
         fontSize: 2 * vh,
         lineHeight: 2.4 * vh,
-        color: BLUE,
+        color: c.primary,
     },
     stepperTextPrimary: {
-        color: 'white',
+        color: c.onPrimary,
     },
     qty: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 1.8 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
         minWidth: 8 * vw,
         textAlign: 'center',
     },
 })
-export default styles;
+export default themed(makeStyles);

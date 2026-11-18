@@ -1,0 +1,12 @@
+[
+  { "id": "coca-cola",     "name": "Coca-Cola",     "price": "120", "image": "drink-cola",   "category": "drink" },
+  { "id": "pepsi",         "name": "Pepsi",         "price": "120", "image": "drink-pepsi",  "category": "drink" },
+  { "id": "sprite",        "name": "Sprite",        "price": "120", "image": "drink-sprite", "category": "drink" },
+  { "id": "7up",           "name": "7UP",           "price": "120", "image": "drink-7up",    "category": "drink" },
+  { "id": "fanta",         "name": "Fanta",         "price": "120", "image": "drink-fanta",  "category": "drink" },
+  { "id": "mineral-water", "name": "Mineral Water", "price": "80",  "image": "drink-water",  "category": "drink" },
+  { "id": "extra-raita",   "name": "Raita",         "price": "80",  "image": "image14",      "category": "side" },
+  { "id": "extra-salad",   "name": "Green Salad",   "price": "150", "image": "image4",       "category": "side" },
+  { "id": "extra-naan",    "name": "Naan",          "price": "30",  "image": "image5",       "category": "side" },
+  { "id": "extra-roti",    "name": "Roti",          "price": "20",  "image": "image6",       "category": "side" }
+]

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { CATEGORIES, categoryOf } from '../../data/categories';
 import styles from './styles';
 import ProductCard from '../../components/Sections/ProductCard';
 import { connect } from 'react-redux';
@@ -9,11 +10,13 @@ import MainInput from '../../components/Input/MainInput';
 import CircularBold from '../../components/Text/CircularBold';
 import PoppinsRegular from '../../components/Text/PoppinsRegular';
 import { icons } from '../../assets/images';
+import FoodSlider from '../../components/Sections/FoodSlider';
 class ProductList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       keyword: '',
+      category: 'all',
     };
   }
   componentDidMount() {
@@ -60,8 +63,41 @@ class ProductList extends Component {
   _renderProductList = (item) => {
     return <ProductCard foodList={item}/>;
   };
+  _renderCategories = (menu) => {
+    // Only show categories that have dishes on today's menu
+    const available = CATEGORIES.filter(
+      (category) => category.key === 'all' || menu.some((food) => categoryOf(food) === category.key),
+    );
+    return (
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
+        {available.map((category) => {
+          const selected = this.state.category === category.key;
+          return (
+            <TouchableOpacity
+              key={category.key}
+              activeOpacity={0.8}
+              onPress={() => this.setState({ category: category.key })}
+              style={[
+                styles.chip,
+                { backgroundColor: selected ? category.color : category.background },
+              ]}
+            >
+              <Text style={styles.chipEmoji}>{category.emoji}</Text>
+              <Text style={[styles.chipText, { color: selected ? 'white' : category.color }]}>
+                {category.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    );
+  };
   render() {
-    var item = this.props.all_product_list
+    var menu = this.props.all_product_list || []
+    var item = this.state.category === 'all'
+      ? menu
+      : menu.filter((food) => categoryOf(food) === this.state.category)
+    const activeCategory = CATEGORIES.find((category) => category.key === this.state.category)
     return (
       <View style={styles.container}>
         <View style={styles.searhBar}>
@@ -72,13 +108,7 @@ class ProductList extends Component {
             onChangeText={(keyword) => this.onStateChange('keyword', keyword)}
           />
         </View>
-        <View style={styles.sectionHeader}>
-          <CircularBold style={styles.sectionTitle}>Today's Menu</CircularBold>
-          <PoppinsRegular style={styles.sectionCount}>
-            {(item || []).length} items
-          </PoppinsRegular>
-        </View>
-  <FlatList 
+  <FlatList
   showsVerticalScrollIndicator={false}
   data={item}
   renderItem={this._renderProductList}
@@ -87,6 +117,29 @@ class ProductList extends Component {
   numColumns={2}
   keyExtractor={item=>item.id}
   contentContainerStyle={styles.listContent}
+  ListHeaderComponent={
+    <View>
+      {/* Featured banners only on the full menu, not while searching */}
+      {this.state.keyword.trim() === '' && (
+        <View style={styles.sliderWrap}>
+          <FoodSlider items={menu}/>
+        </View>
+      )}
+      <View style={styles.sliderWrap}>
+        {this._renderCategories(menu)}
+      </View>
+      <View style={styles.sectionHeader}>
+        <CircularBold style={styles.sectionTitle}>
+          {this.state.keyword.trim() !== ''
+            ? 'Search Results'
+            : this.state.category === 'all' ? "Today's Menu" : activeCategory.label}
+        </CircularBold>
+        <PoppinsRegular style={styles.sectionCount}>
+          {(item || []).length} items
+        </PoppinsRegular>
+      </View>
+    </View>
+  }
   />
       </View>
     );

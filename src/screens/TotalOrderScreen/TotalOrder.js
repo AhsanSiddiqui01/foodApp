@@ -1,33 +1,30 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { View, Text, Image, FlatList } from 'react-native'
-import firestore from '@react-native-firebase/firestore'
 import styles from './styles'
 import { getFoodImage, icons } from '../../assets/images'
+import DateRangeBar from '../../components/Sections/DateRangeBar'
+import { presetRange, rangeLabel } from '../../utils/dateRange'
+import { ordersInRange, toOrder, staffOrderFilter, activeOrders } from '../../utils/orders'
+import { useSelector } from 'react-redux'
 
-// Same "m/d/yy" format the checkout screen saves as orderDetail.date
-const todayString = () => {
-  const now = new Date();
-  return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear().toString().substr(-2);
-}
-
-// Kitchen summary: how many of each dish were ordered today
+// Kitchen summary: how many of each dish were ordered in the chosen dates (default: today)
 function TotalOrders() {
+  const uid = useSelector((state) => state.GeneralReducer.id)
+  const apcontrol = useSelector((state) => state.GeneralReducer.apcontrol)
   const [posts,setPosts] = useState([])
+  const [range,setRange] = useState(() => presetRange('today'))
 
-  // Listen to orders once; onSnapshot keeps the totals live when new orders arrive
+  // Only the chosen dates are downloaded; onSnapshot keeps the totals live as orders arrive
   useEffect(()=>{
-    const unsubscribe = firestore().collection('orderList')
-    .onSnapshot((querySnapShot) => {
-      setPosts(querySnapShot.docs.map((doc) => doc.data().orderDetail))
+    return ordersInRange(range, staffOrderFilter(apcontrol, uid)).onSnapshot((querySnapShot) => {
+      // cancelled orders are not cooked, so they are left out of the kitchen totals
+      setPosts(activeOrders(querySnapShot.docs.map(toOrder)))
     }, (error) => console.log('TotalOrders error', error))
-    return unsubscribe
-  },[])
+  },[range, apcontrol, uid])
 
-  const today = todayString()
   const { dishes, totalItems, totalAmount, orderCount } = useMemo(() => {
     const byName = {}
-    const todays = posts.filter((order) => order && order.date === today)
-    todays.forEach((order) => {
+    posts.forEach((order) => {
       (order.userOrder || []).forEach((food) => {
         const qty = Number(food.QTY) || 1
         if (!byName[food.name]) {
@@ -41,15 +38,15 @@ function TotalOrders() {
       dishes: list,
       totalItems: list.reduce((sum, dish) => sum + dish.QTY, 0),
       totalAmount: list.reduce((sum, dish) => sum + dish.QTY * dish.price, 0),
-      orderCount: todays.length,
+      orderCount: posts.length,
     }
-  }, [posts, today])
+  }, [posts])
   const maxQty = dishes.length > 0 ? dishes[0].QTY : 1
 
   const renderHeader = () => (
     <View style={styles.hero}>
-      <Text style={styles.heroLabel}>Today's Kitchen Order</Text>
-      <Text style={styles.heroDate}>{today}  •  {orderCount} {orderCount === 1 ? 'order' : 'orders'}</Text>
+      <Text style={styles.heroLabel}>{range.key === 'today' ? "Today's Kitchen Order" : 'Kitchen Summary'}</Text>
+      <Text style={styles.heroDate}>{rangeLabel(range)}  •  {orderCount} {orderCount === 1 ? 'order' : 'orders'}</Text>
       <View style={styles.heroStats}>
         <View style={styles.heroStat}>
           <Text style={styles.heroValue}>{totalItems}</Text>
@@ -86,6 +83,7 @@ function TotalOrders() {
 
   return (
     <View style={styles.screen}>
+      <DateRangeBar value={range} onChange={setRange} />
       <FlatList
         data={dishes}
         keyExtractor={(item) => item.name}
@@ -96,7 +94,9 @@ function TotalOrders() {
         ListEmptyComponent={
           <View style={styles.emptyView}>
             <Image source={icons.orderCart} style={styles.emptyIcon}/>
-            <Text style={styles.emptyTitle}>Nothing ordered today</Text>
+            <Text style={styles.emptyTitle}>
+              {range.key === 'today' ? 'Nothing ordered today' : 'Nothing ordered in this period'}
+            </Text>
             <Text style={styles.emptyText}>Item totals will appear as orders come in</Text>
           </View>
         }

@@ -2,15 +2,23 @@ import actionTypes from './ActionTypes';
 import Api from '../../Api/index';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import { isStaff } from '../../utils/roles';
+import { ACCOUNT_SUSPENDED, ACCOUNT_REMOVED } from '../../utils/userAdmin';
 
 const _authErrorMessage = (code) => {
   switch (code) {
     case 'auth/invalid-email':
-      return 'Please enter a valid email';
+      return 'Please enter a valid email address';
+    // These two only arrive when "Email enumeration protection" is turned off in the console
     case 'auth/user-not-found':
+      return 'No account found with this email';
     case 'auth/wrong-password':
+      return 'Incorrect password. Please try again.';
+    // With the protection on (Firebase default) a wrong email and a wrong password look the same
+    case 'auth/invalid-login':
     case 'auth/invalid-credential':
-      return 'Invalid email or password';
+      return 'Incorrect email or password. Please try again.';
     case 'auth/user-disabled':
       return 'This account has been disabled';
     case 'auth/too-many-requests':
@@ -33,10 +41,13 @@ const actions = {
           credentials.password,
         );
         const profile = await firestore().collection('userProfiles').doc(user.uid).get();
-        if (!profile.exists) {
+        // Removed or blocked accounts are signed straight back out; the login screen shows
+        // these as a dialog (an object) rather than a toast (a string)
+        const removed = !profile.exists || profile.data().deleted;
+        if (removed || profile.data().blocked) {
           await auth().signOut();
           dispatch({ type: actionTypes.CLOSE_LOADING });
-          return error('Account profile not found, contact admin');
+          return error(removed ? ACCOUNT_REMOVED : ACCOUNT_SUSPENDED);
         }
         const { name, apcontrol } = profile.data();
         dispatch({
@@ -65,8 +76,17 @@ const actions = {
 
   //logout
   logOut: (success, error) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
       dispatch({ type: actionTypes.START_LOADING });
+      // Stop new-order alerts on this device once the admin signs out (must run while still signed in)
+      if (isStaff(getState().GeneralReducer.apcontrol)) {
+        try {
+          const token = await messaging().getToken();
+          await firestore().collection('adminToken').doc(token).delete();
+        } catch (e) {
+          console.log('admin token remove error', e);
+        }
+      }
       try {
         if (auth().currentUser) {
           await auth().signOut();

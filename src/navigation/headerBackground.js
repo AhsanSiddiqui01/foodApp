@@ -1,12 +1,15 @@
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient';
-const headerBackground = (props) => {
+import styles from './styles';
+import { useTheme } from '../theme';
 
-    //old header color:'154689
-    // console.log('headerBackground : ',props)
+// Compact header in the app's blue theme (a deeper blue in dark mode)
+const headerBackground = (props) => <HeaderGradient {...props} />;
+
+const HeaderGradient = (props) => {
+    const { colors } = useTheme();
     return(
-        <LinearGradient colors={['#1458C4', '#2F7BEA']} style={[{flex:1, borderBottomLeftRadius:24, borderBottomRightRadius:24},props.style]} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}>
-        </LinearGradient>
+        <LinearGradient colors={[colors.headerFrom, colors.headerTo]} style={[styles.headerBackground, props.style]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}/>
     )
 }
 export default headerBackground;

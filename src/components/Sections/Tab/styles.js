@@ -1,9 +1,11 @@
+import { themed } from '../../../theme';
 import ThemeColors from '../../../utils/ThemeColors';
 
 const {StyleSheet} = require('react-native');
 const {vw, vh} = require('../../../utils/Units');
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
   container: {
     width: 10 * vw,
     height: 10 * vh,
@@ -13,7 +15,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'red'
   },
   animatedContainer: {
-    shadowColor: '#1458C4',
+    shadowColor: c.shadow,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 2 * vh,
     left:  4 * vw,
-    backgroundColor: ThemeColors.white,
+    backgroundColor: c.card,
   },
   // blur: {borderRadius: 3 * vw, flex: 1},
   buttonContainer: {
@@ -56,13 +58,13 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     height: 5 * vh,
-    width: 18 * vw,
+    width: 16 * vw,
     borderRadius: 2.5 * vh,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tabButtonActive: {
-    backgroundColor: '#E8F0FD',
+    backgroundColor: c.primarySoft,
   },
   badge: {
     position: 'absolute',
@@ -72,14 +74,14 @@ const styles = StyleSheet.create({
     height: 5 * vw,
     paddingHorizontal: 1 * vw,
     borderRadius: 2.5 * vw,
-    backgroundColor: ThemeColors.orderButton,
+    backgroundColor: c.accent,
     borderWidth: 2,
-    borderColor: ThemeColors.white,
+    borderColor: c.card,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badgeText: {
-    color: ThemeColors.white,
+    color: c.onPrimary,
     fontSize: 2.6 * vw,
     fontWeight: '700',
   },
@@ -95,12 +97,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5 * vw,
   },
   label: {
-    color: ThemeColors.primary,
+    color: c.primary,
     fontSize: 1.6 * vh,
   },
   value: {
-    color: '#050E37',
+    color: c.text,
     fontSize: 1.6 * vh,
   },
 });
-export default styles;
+export default themed(makeStyles);

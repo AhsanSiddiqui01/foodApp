@@ -1,6 +1,8 @@
 export const icons = {
     previous: require('./icons/previous.png'),
     hidePasswordGrey: require('./icons/hidePasswordGrey.png'),
+    eye: require('./icons/eye.png'),
+    eyeOff: require('./icons/eye-off.png'),
     logout: require('./icons/power.png'),
     loadingIcon: require('./icons/fast-food.png'),
     coolIcon: require('./icons/cool.png'),
@@ -13,6 +15,7 @@ export const icons = {
     search: require('./icons/search.png'),
     plusWhite: require('./icons/plus-white.png'),
     trash: require('./icons/trash.png'),
+    edit: require('./icons/edit.png'),
   };
   export const tabIcons = {
     FoodActive:      require('./tabIcons/tab-food-active.png'),
@@ -21,6 +24,12 @@ export const icons = {
     OrderInactive:   require('./tabIcons/tab-cart.png'),
     HistoryActive:   require('./tabIcons/tab-history-active.png'),
     HistoryInactive: require('./tabIcons/tab-history.png'),
+    SettingsActive:  require('./tabIcons/tab-settings-active.png'),
+    SettingsInactive: require('./tabIcons/tab-settings.png'),
+    UsersActive:     require('./tabIcons/tab-users-active.png'),
+    UsersInactive:   require('./tabIcons/tab-users.png'),
+    MenuActive:      require('./tabIcons/tab-menu-active.png'),
+    MenuInactive:    require('./tabIcons/tab-menu.png'),
     OrdersActive:    require('./tabIcons/tab-orders-active.png'),
     OrdersInactive:  require('./tabIcons/tab-orders.png'),
     TotalActive:     require('./tabIcons/tab-total-active.png'),
@@ -31,7 +40,8 @@ export const icons = {
 
   };
   export const TitleImages = {
-    Logo : require('./TitleImages/login_illustration.png')
+    Logo : require('./TitleImages/login_illustration.png'),
+    EmptyCart : require('./TitleImages/empty_cart.png')
   };
   // Food photos bundled with the app; foodList.image can be one of these keys or a full https URL
   export const foodImages = {

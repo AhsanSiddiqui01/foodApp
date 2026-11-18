@@ -1,21 +1,23 @@
+import { themed } from '../../../theme';
 import { vh, vw } from "../../../utils/Units";
 import { fonts } from "../../../assets/fonts";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     card: {
         width: 92 * vw,
         alignSelf: 'center',
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         borderRadius: 18,
         paddingHorizontal: 4 * vw,
         paddingTop: 2 * vh,
         paddingBottom: 1.5 * vh,
         marginBottom: 2 * vh,
         elevation: 3,
-        shadowColor: '#1458C4',
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
@@ -27,23 +29,23 @@ const styles = StyleSheet.create({
         paddingBottom: 1.5 * vh,
         marginBottom: 0.5 * vh,
         borderBottomWidth: 1,
-        borderBottomColor: '#EEF1F6',
+        borderBottomColor: c.divider,
     },
     orderNo: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 1.9 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
     },
     dateTime: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.5 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
         marginTop: 0.3 * vh,
     },
     statusPill: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#E7F6EC',
+        backgroundColor: c.successSoft,
         borderRadius: 20,
         paddingHorizontal: 3 * vw,
         paddingVertical: 0.6 * vh,
@@ -52,13 +54,79 @@ const styles = StyleSheet.create({
         width: 1.8 * vw,
         height: 1.8 * vw,
         borderRadius: 0.9 * vw,
-        backgroundColor: '#2E9E5B',
+        backgroundColor: c.success,
         marginRight: 1.5 * vw,
     },
     statusText: {
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.4 * vh,
-        color: '#2E9E5B',
+        color: c.success,
+    },
+    tracker: {
+        flexDirection: 'row',
+        paddingTop: 0.5 * vh,
+        paddingBottom: 1.2 * vh,
+        marginBottom: 0.5 * vh,
+        borderBottomWidth: 1,
+        borderBottomColor: c.divider,
+    },
+    trackerStep: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    trackerRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+    },
+    trackerLine: {
+        flex: 1,
+        height: 3,
+        backgroundColor: c.border,
+    },
+    trackerLineHidden: {
+        backgroundColor: 'transparent',
+    },
+    trackerDot: {
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+        borderWidth: 2,
+        borderColor: c.border,
+        backgroundColor: c.card,
+    },
+    trackerLabel: {
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.25 * vh,
+        color: c.textMuted,
+        marginTop: 0.5 * vh,
+    },
+    cancelBox: {
+        backgroundColor: c.dangerSoft,
+        borderLeftWidth: 3,
+        borderLeftColor: c.danger,
+        borderRadius: 10,
+        paddingHorizontal: 3 * vw,
+        paddingVertical: 1.1 * vh,
+        marginBottom: 1 * vh,
+    },
+    cancelTitle: {
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.55 * vh,
+        color: c.danger,
+    },
+    cancelReason: {
+        fontFamily: fonts.Poppins.regular,
+        fontSize: 1.55 * vh,
+        color: c.danger,
+        marginTop: 0.2 * vh,
+    },
+    itemCancelled: {
+        opacity: 0.5,
+    },
+    footerAmountCancelled: {
+        color: c.textMuted,
+        textDecorationLine: 'line-through',
     },
     itemRow: {
         flexDirection: 'row',
@@ -78,18 +146,18 @@ const styles = StyleSheet.create({
     itemName: {
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.8 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
     },
     itemNotes: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.4 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
     },
     itemQty: {
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.6 * vh,
-        color: '#1458C4',
-        backgroundColor: '#E8F0FD',
+        color: c.primary,
+        backgroundColor: c.primarySoft,
         borderRadius: 8,
         paddingHorizontal: 2 * vw,
         paddingVertical: 0.3 * vh,
@@ -99,7 +167,7 @@ const styles = StyleSheet.create({
     itemPrice: {
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.7 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
         minWidth: 18 * vw,
         textAlign: 'right',
     },
@@ -110,22 +178,22 @@ const styles = StyleSheet.create({
         marginTop: 0.5 * vh,
         paddingTop: 1.5 * vh,
         borderTopWidth: 1,
-        borderTopColor: '#EEF1F6',
+        borderTopColor: c.divider,
     },
     footerCount: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.6 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
     },
     footerTotal: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.7 * vh,
-        color: ThemeColors.fontDarkGrey,
+        color: c.textSecondary,
     },
     footerAmount: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2.1 * vh,
-        color: ThemeColors.orderButton,
+        color: c.accent,
     },
 })
-export default styles;
+export default themed(makeStyles);

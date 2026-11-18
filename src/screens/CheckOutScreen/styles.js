@@ -1,12 +1,14 @@
+import { themed } from '../../theme';
 import { vh, vw } from "../../utils/Units";
 import { fonts } from "../../assets/fonts";
 import ThemeColors from "../../utils/ThemeColors";
 const { StyleSheet } = require("react-native");
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     mainContainer:{
         flex:1,
-        backgroundColor:'#F5F7FB',
+        backgroundColor: c.background,
       },
       listContent:{
         paddingTop: 2 * vh,
@@ -17,18 +19,88 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.7 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
         marginBottom: 1.5 * vh,
+      },
+      drinksSection:{
+        marginTop: 1 * vh,
+        marginBottom: 1.5 * vh,
+      },
+      drinksTitle:{
+        width: 92 * vw,
+        alignSelf:'center',
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 2 * vh,
+        color: c.text,
+        marginBottom: 1.2 * vh,
+      },
+      drinksRow:{
+        paddingHorizontal: 4 * vw,
+        paddingBottom: 1 * vh,
+      },
+      drinkCard:{
+        width: 28 * vw,
+        backgroundColor: c.card,
+        borderRadius: 16,
+        borderWidth: 1.5,
+        borderColor:'transparent',
+        padding: 2.5 * vw,
+        marginRight: 3 * vw,
+        alignItems:'center',
+        elevation: 2,
+        shadowColor: c.shadow,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+      },
+      drinkCardActive:{
+        borderColor: c.primary,
+      },
+      drinkImage:{
+        width: 16 * vw,
+        height: 16 * vw,
+        borderRadius: 12,
+      },
+      drinkName:{
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.6 * vh,
+        color: c.text,
+        marginTop: 0.6 * vh,
+      },
+      drinkPrice:{
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.5 * vh,
+        color: c.accent,
+      },
+      drinkAddBtn:{
+        marginTop: 0.8 * vh,
+        alignSelf:'stretch',
+        alignItems:'center',
+        borderRadius: 10,
+        borderWidth: 1.2,
+        borderColor: c.primary,
+        paddingVertical: 0.6 * vh,
+      },
+      drinkAddBtnActive:{
+        backgroundColor: c.primary,
+      },
+      drinkAddText:{
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.4 * vh,
+        color: c.primary,
+      },
+      drinkAddTextActive:{
+        color: c.onPrimary,
       },
       summaryCard:{
         width: 92 * vw,
         alignSelf:'center',
-        backgroundColor:'white',
+        backgroundColor: c.card,
         borderRadius: 18,
         padding: 4 * vw,
         marginTop: 1 * vh,
         elevation: 3,
-        shadowColor: '#1458C4',
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
@@ -36,7 +108,7 @@ const styles = StyleSheet.create({
       summaryTitle:{
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
         marginBottom: 1 * vh,
       },
       summaryRow:{
@@ -48,37 +120,37 @@ const styles = StyleSheet.create({
       summaryLabel:{
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.7 * vh,
-        color: ThemeColors.fontDarkGrey,
+        color: c.textSecondary,
       },
       summaryValue:{
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.7 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
       },
       freeText:{
-        color:'#2E9E5B',
+        color: c.success,
       },
       totalRow:{
         marginTop: 1 * vh,
         paddingTop: 1.5 * vh,
         borderTopWidth: 1,
-        borderTopColor:'#EEF1F6',
+        borderTopColor: c.divider,
         borderStyle:'dashed',
       },
       totalLabel:{
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
       },
       totalValue:{
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2.4 * vh,
-        color: ThemeColors.orderButton,
+        color: c.accent,
       },
       closedBanner:{
         width: 92 * vw,
         alignSelf:'center',
-        backgroundColor:'#FDECEC',
+        backgroundColor: c.dangerSoft,
         borderRadius: 12,
         paddingVertical: 1.2 * vh,
         paddingHorizontal: 4 * vw,
@@ -87,7 +159,7 @@ const styles = StyleSheet.create({
       closedText:{
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.5 * vh,
-        color: ThemeColors.errorRed,
+        color: c.danger,
         textAlign:'center',
       },
       placeOrderBtn:{
@@ -98,64 +170,120 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
         paddingHorizontal: 6 * vw,
-        backgroundColor: ThemeColors.orderButton,
+        backgroundColor: c.accent,
         borderRadius: 16,
         marginTop: 2 * vh,
         elevation: 5,
-        shadowColor: ThemeColors.orderButton,
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
       },
       placeOrderBtnDisabled:{
-        backgroundColor:'#C1C0C8',
+        backgroundColor: c.textMuted,
         elevation: 0,
       },
       placeOrderText:{
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2 * vh,
-        color:'white',
+        color: c.onPrimary,
       },
       placeOrderAmount:{
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2 * vh,
-        color:'white',
+        color: c.onPrimary,
+      },
+      emptyScroll:{
+        flexGrow:1,
+        paddingTop: 4 * vh,
+        paddingBottom: 14 * vh,
       },
       noDataView:{
-        flex:1,
-        justifyContent:'center',
         alignItems:'center',
-        paddingBottom: 10 * vh,
+        paddingHorizontal: 8 * vw,
       },
       hungryIcon:{
-        width: 40 * vw,
-        height: 40 * vw,
+        // empty_cart.png is 420x380
+        width: 70 * vw,
+        height: 70 * vw * (380 / 420),
         resizeMode:'contain',
       },
       hungryText:{
         fontFamily: fonts.Poppins.semiBold,
-        color: ThemeColors.backgroundBlack,
-        fontSize: 2.4 * vh,
+        color: c.text,
+        fontSize: 2.8 * vh,
         marginTop: 2 * vh,
       },
       emptyText:{
         fontFamily: fonts.Poppins.regular,
-        color: ThemeColors.fontLightGrey,
-        fontSize: 1.7 * vh,
-        marginTop: 0.5 * vh,
+        color: c.textSecondary,
+        fontSize: 1.8 * vh,
+        textAlign:'center',
+        lineHeight: 2.7 * vh,
+        marginTop: 0.8 * vh,
       },
       browseBtn:{
         marginTop: 3 * vh,
-        backgroundColor:'#1458C4',
+        alignSelf:'stretch',
+        alignItems:'center',
+        backgroundColor: c.primary,
         borderRadius: 14,
-        paddingVertical: 1.6 * vh,
-        paddingHorizontal: 10 * vw,
+        paddingVertical: 1.8 * vh,
         elevation: 4,
+        shadowColor: c.shadow,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
       },
       browseText:{
         fontFamily: fonts.Poppins.semiBold,
-        fontSize: 1.8 * vh,
-        color:'white',
+        fontSize: 1.9 * vh,
+        color: c.onPrimary,
+      },
+      popularSection:{
+        marginTop: 4.5 * vh,
+      },
+      popularTitle:{
+        width: 92 * vw,
+        alignSelf:'center',
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 2 * vh,
+        color: c.text,
+        marginBottom: 1.2 * vh,
+      },
+      popularRow:{
+        paddingHorizontal: 4 * vw,
+        paddingBottom: 1 * vh,
+      },
+      popularCard:{
+        width: 36 * vw,
+        backgroundColor: c.card,
+        borderRadius: 16,
+        overflow:'hidden',
+        marginRight: 3 * vw,
+        elevation: 3,
+        shadowColor: c.shadow,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+      },
+      popularImage:{
+        width:'100%',
+        height: 24 * vw,
+      },
+      popularName:{
+        fontFamily: fonts.Poppins.medium,
+        fontSize: 1.7 * vh,
+        color: c.text,
+        paddingHorizontal: 3 * vw,
+        marginTop: 0.8 * vh,
+      },
+      popularPrice:{
+        fontFamily: fonts.Poppins.semiBold,
+        fontSize: 1.6 * vh,
+        color: c.accent,
+        paddingHorizontal: 3 * vw,
+        marginBottom: 1.2 * vh,
       },
 })
-export default styles;
+export default themed(makeStyles);

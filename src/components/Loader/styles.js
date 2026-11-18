@@ -1,3 +1,4 @@
+import { themed } from '../../theme';
 import { StyleSheet } from 'react-native'
 import ThemeColors from '../../utils/ThemeColors';
 // import { Fonts } from '../../assets/fonts';
@@ -6,10 +7,11 @@ import ThemeColors from '../../utils/ThemeColors';
 
 import { vh,vw } from './../../utils/Units';
 // import {vw} from './../../utils/Units'
-export default styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
  
         modalTouchable:{
-            backgroundColor: "rgba(21,34,43,.35)",
+            backgroundColor: c.overlay,
             alignItems: 'center', 
             justifyContent: 'center',
             flex:1,
@@ -19,7 +21,7 @@ export default styles = StyleSheet.create({
         },
         modalContainer:{
            width:"100%",
-            backgroundColor: 'white', 
+            backgroundColor: c.card, 
             borderRadius: 3 * vw,  
             paddingTop:vh*2,
             paddingBottom:vh*4,
@@ -30,13 +32,13 @@ export default styles = StyleSheet.create({
         },
         check:{width:vw*15,height:vh*5,marginBottom:vh*1},
         title:{fontSize:vw*5,marginVertical:vh*1},
-        Message:{fontSize:vw*4.3,textAlign:"center",color:"#333333",marginTop:vh*1.5},
+        Message:{fontSize:vw*4.3,textAlign:"center",color:c.text,marginTop:vh*1.5},
         redirect:{fontSize:vw*3.5,marginTop:vh*3},
         login:{fontSize:vw*3.5,textDecorationLine:"underline",color:"#00AF41"},
         BtnContainer:{marginTop:vh*3,width:"50%"},
         cross:{width:vw*3,height:vh*2},
         imageBg:{
-            shadowColor: "#1458C4",
+            shadowColor: c.shadow,
             shadowOffset: { width: 0, height: 6 },
             shadowOpacity: 0.2,
             shadowRadius: 16,
@@ -44,7 +46,7 @@ export default styles = StyleSheet.create({
             elevation: 10,
             width: vw * 34,
             height: vw * 34,
-            backgroundColor: "white",
+            backgroundColor: c.card,
             alignItems:"center",
             justifyContent:"center"
           },
@@ -72,10 +74,11 @@ export default styles = StyleSheet.create({
 
           container:{alignItems:"center",justifyContent:"center",flexDirection:"row"},
           checkMark:{width:vw*10,height:vh*5,marginBottom:vh*1},
-          text:{fontSize:vh*1.7,textAlign:"center",color:ThemeColors.fontDarkGrey,marginTop:1.5*vh},
+          text:{fontSize:vh*1.7,textAlign:"center",color:c.textSecondary,marginTop:1.5*vh},
           btnsContainer:{flexDirection:"row",justifyContent:"space-between",marginTop:vh*3,width:"80%"},
           yesBtn:{backgroundColor:"#92278F",width:"44%",height:vh*5.4},
           noBtn:{width:"44%",backgroundColor:"#FFFFFF",color:"#92278F",borderWidth:vw*.3,borderColor:"#92278F",height:vh*5.4},
           request:{backgroundColor:"#92278F",width:"35%",marginTop:vh*2,height:vh*5}
       
 })
+export default themed(makeStyles);

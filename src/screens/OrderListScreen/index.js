@@ -1,57 +1,75 @@
 import React from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
+import { themeColors } from '../../theme';
+import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native'
 import { useEffect,useState } from 'react'
-import firestore from '@react-native-firebase/firestore'
 import UserOrderCart from '../../components/Sections/UserOrderCard'
 import messaging from '@react-native-firebase/messaging';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import styles from './styles'
 import { icons } from '../../assets/images'
-
-// Same "m/d/yy" format the checkout screen saves as orderDetail.date
-const todayString = () => {
-  const now = new Date();
-  return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear().toString().substr(-2);
-}
+import DateRangeBar from '../../components/Sections/DateRangeBar'
+import { presetRange, rangeLabel } from '../../utils/dateRange'
+import { ordersInRange, toOrder, staffOrderFilter, activeOrders } from '../../utils/orders'
+import { useSelector } from 'react-redux'
+import { isAdmin as isOwner } from '../../utils/roles'
 
 function UserOrders() {
+  const uid = useSelector((state) => state.GeneralReducer.id)
+  const apcontrol = useSelector((state) => state.GeneralReducer.apcontrol)
   const [posts,setPosts] = useState([])
-  const [filter,setFilter] = useState('today')
+  const [range,setRange] = useState(() => presetRange('today'))
+  const [loading,setLoading] = useState(true)
+  const [failed,setFailed] = useState(false)
+
+  // New-order pushes come from the notifyAdminsOnNewOrder Cloud Function. Android only shows them
+  // by itself when the app is in the background, so show them with notifee while it is open.
+  useEffect(()=>{
+    notifee.createChannel({ id: 'orders', name: 'New orders', importance: AndroidImportance.HIGH, sound: 'default' })
+      .catch((error) => console.log('notification channel error', error))
+    return messaging().onMessage(async (remoteMessage) => {
+      if (!remoteMessage.notification) {
+        return
+      }
+      await notifee.displayNotification({
+        title: remoteMessage.notification.title,
+        body: remoteMessage.notification.body,
+        android: { channelId: 'orders', smallIcon: 'ic_launcher', pressAction: { id: 'default' } },
+      })
+    })
+  },[])
 
   useEffect(()=>{
     messaging().requestPermission().catch((error) => console.log('notification permission error', error))
-    // All orders, kept live; newest first
-    const unsubscribe = firestore().collection('orderList').onSnapshot((querySnapShot) => {
-      const list = querySnapShot.docs.map((doc) => {
-        const {time,date,userId,userName,userOrder} = doc.data().orderDetail
-        const createdAt = doc.data().createdAt
-        return {
-          id: doc.id,
-          time,
-          date,
-          userName,
-          userId,
-          userOrder: userOrder || [],
-          createdAt: createdAt ? createdAt.toMillis() : 0,
-        }
-      })
-      list.sort((a, b) => b.createdAt - a.createdAt)
-      setPosts(list)
-    }, (error) => console.log('OrderList snapshot error', error));
-    return unsubscribe
   },[])
 
-  const today = todayString()
-  const visible = filter === 'today' ? posts.filter((order) => order.date === today) : posts
+  // Only the chosen dates are downloaded (default: today), kept live; newest first
+  useEffect(()=>{
+    setLoading(true)
+    setFailed(false)
+    // Owner sees every order; an admin only the customers assigned to them
+    return ordersInRange(range, staffOrderFilter(apcontrol, uid)).onSnapshot((querySnapShot) => {
+      setPosts(querySnapShot.docs.map(toOrder))
+      setLoading(false)
+    }, (error) => {
+      console.log('OrderList snapshot error', error)
+      setFailed(true)
+      setLoading(false)
+    });
+  },[range, apcontrol, uid])
+
+  const visible = posts
+  // Cancelled orders stay in the list but are left out of the totals
+  const counted = activeOrders(posts)
   const sumItems = (order) => order.userOrder.reduce((sum, food) => sum + (Number(food.QTY) || 1), 0)
   const sumAmount = (order) => order.userOrder.reduce((sum, food) => sum + Number(food.price || 0) * (Number(food.QTY) || 1), 0)
-  const totalItems = visible.reduce((sum, order) => sum + sumItems(order), 0)
-  const totalAmount = visible.reduce((sum, order) => sum + sumAmount(order), 0)
+  const totalItems = counted.reduce((sum, order) => sum + sumItems(order), 0)
+  const totalAmount = counted.reduce((sum, order) => sum + sumAmount(order), 0)
 
   const renderHeader = () => (
     <View>
       <View style={styles.statsRow}>
         <View style={[styles.statCard, styles.statCardPrimary]}>
-          <Text style={[styles.statValue, styles.statValuePrimary]}>{visible.length}</Text>
+          <Text style={[styles.statValue, styles.statValuePrimary]}>{counted.length}</Text>
           <Text style={[styles.statLabel, styles.statLabelPrimary]}>Orders</Text>
         </View>
         <View style={styles.statCard}>
@@ -63,36 +81,33 @@ function UserOrders() {
           <Text style={styles.statLabel}>Amount</Text>
         </View>
       </View>
-      <View style={styles.segment}>
-        {[['today', 'Today'], ['all', 'All Orders']].map(([key, label]) => (
-          <TouchableOpacity
-            key={key}
-            style={[styles.segmentBtn, filter === key && styles.segmentBtnActive]}
-            activeOpacity={0.8}
-            onPress={() => setFilter(key)}
-          >
-            <Text style={[styles.segmentText, filter === key && styles.segmentTextActive]}>{label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
     </View>
   )
 
   return (
     <View style={styles.container}>
+      <DateRangeBar value={range} onChange={setRange} />
       <FlatList
         data={visible}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={renderHeader}
-        renderItem={({item}) => <UserOrderCart item={item}/>}
+        renderItem={({item}) => <UserOrderCart item={item} showAdmin={isOwner(apcontrol)}/>}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
-          <View style={styles.emptyView}>
-            <Image source={icons.orderCart} style={styles.emptyIcon}/>
-            <Text style={styles.emptyTitle}>{filter === 'today' ? "No orders today" : 'No orders yet'}</Text>
-            <Text style={styles.emptyText}>New orders will show up here instantly</Text>
-          </View>
+          loading
+            ? <ActivityIndicator style={styles.loader} color={themeColors().primary} />
+            : (
+              <View style={styles.emptyView}>
+                <Image source={icons.orderCart} style={styles.emptyIcon}/>
+                <Text style={styles.emptyTitle}>
+                  {failed ? 'Could not load orders' : range.key === 'today' ? 'No orders today' : 'No orders in this period'}
+                </Text>
+                <Text style={styles.emptyText}>
+                  {failed ? 'Please check your internet and try again.' : `Showing ${rangeLabel(range)}. New orders show up here instantly.`}
+                </Text>
+              </View>
+            )
         }
       />
     </View>

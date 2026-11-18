@@ -1,18 +1,20 @@
+import { themed } from '../../../theme';
 import { vh, vw } from "../../../utils/Units";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../../utils/ThemeColors");
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     container: {
         width: 44 * vw,
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         marginHorizontal: 2 * vw,
         marginBottom: 2 * vh,
         borderRadius: 16,
         overflow: 'hidden',
         elevation: 4,
-        shadowColor: '#1458C4',
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.12,
         shadowRadius: 10,
@@ -27,11 +29,11 @@ const styles = StyleSheet.create({
         paddingBottom: 1.4 * vh,
     },
     name: {
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
         fontSize: 3.8 * vw,
     },
     shop: {
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
         fontSize: 2.9 * vw,
         marginTop: 0.2 * vh,
     },
@@ -42,14 +44,14 @@ const styles = StyleSheet.create({
         marginTop: 1 * vh,
     },
     price: {
-        color: ThemeColors.orderButton,
+        color: c.accent,
         fontSize: 4 * vw,
     },
     addButton: {
         height: 8 * vw,
         width: 8 * vw,
         borderRadius: 4 * vw,
-        backgroundColor: '#1458C4',
+        backgroundColor: c.primary,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -59,4 +61,4 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
 })
-export default styles;
+export default themed(makeStyles);

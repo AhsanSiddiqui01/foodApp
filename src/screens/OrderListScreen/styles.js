@@ -1,17 +1,18 @@
+import { themed } from '../../theme';
 import { vh,vw } from "../../utils/Units";
 import { fonts } from "../../assets/fonts";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../utils/ThemeColors");
 
-const BLUE = '#1458C4';
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FB',
+    backgroundColor: c.background,
   },
   listContent: {
-    paddingTop: 2 * vh,
+    paddingTop: 1 * vh,
     paddingBottom: 12 * vh,
   },
   statsRow: {
@@ -22,45 +23,45 @@ const styles = StyleSheet.create({
   },
   statCard: {
     width: 29 * vw,
-    backgroundColor: 'white',
+    backgroundColor: c.card,
     borderRadius: 16,
     paddingVertical: 1.6 * vh,
     paddingHorizontal: 3 * vw,
     elevation: 3,
-    shadowColor: BLUE,
+    shadowColor: c.shadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
   },
   statCardPrimary: {
-    backgroundColor: BLUE,
+    backgroundColor: c.primary,
   },
   statValue: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 2.6 * vh,
-    color: ThemeColors.backgroundBlack,
+    color: c.text,
   },
   statValuePrimary: {
-    color: 'white',
+    color: c.onPrimary,
   },
   statValueAmount: {
     fontSize: 2 * vh,
-    color: ThemeColors.orderButton,
+    color: c.accent,
     paddingVertical: 0.3 * vh,
   },
   statLabel: {
     fontFamily: fonts.Poppins.regular,
     fontSize: 1.5 * vh,
-    color: ThemeColors.fontLightGrey,
+    color: c.textMuted,
   },
   statLabelPrimary: {
-    color: '#DCE8FB',
+    color: c.primarySoft,
   },
   segment: {
     width: 92 * vw,
     alignSelf: 'center',
     flexDirection: 'row',
-    backgroundColor: '#E9EEF6',
+    backgroundColor: c.segment,
     borderRadius: 14,
     padding: 4,
     marginTop: 2 * vh,
@@ -73,16 +74,19 @@ const styles = StyleSheet.create({
     borderRadius: 11,
   },
   segmentBtnActive: {
-    backgroundColor: 'white',
+    backgroundColor: c.card,
     elevation: 2,
   },
   segmentText: {
     fontFamily: fonts.Poppins.medium,
     fontSize: 1.7 * vh,
-    color: ThemeColors.fontLightGrey,
+    color: c.textMuted,
   },
   segmentTextActive: {
-    color: BLUE,
+    color: c.primary,
+  },
+  loader: {
+    marginTop: 6 * vh,
   },
   emptyView: {
     marginTop: 6 * vh,
@@ -96,14 +100,14 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 2.2 * vh,
-    color: ThemeColors.backgroundBlack,
+    color: c.text,
     marginTop: 2 * vh,
   },
   emptyText: {
     fontFamily: fonts.Poppins.regular,
     fontSize: 1.7 * vh,
-    color: ThemeColors.fontLightGrey,
+    color: c.textMuted,
     marginTop: 0.5 * vh,
   },
 })
-export default styles;
+export default themed(makeStyles);

@@ -1,11 +1,13 @@
+import { themed } from '../../../theme';
 const { StyleSheet } = require("react-native");
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     buttonContainer: {
         borderRadius: 12,
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         elevation: 6,
-        shadowColor: '#1458C4',
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -18,9 +20,9 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     text:{
-        color:'white',
+        color: c.onPrimary,
         fontSize: 16,
         letterSpacing: 0.5,
     }
 })
-export default styles
+export default themed(makeStyles);

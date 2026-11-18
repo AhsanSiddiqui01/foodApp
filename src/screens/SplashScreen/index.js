@@ -1,4 +1,5 @@
 import React, {useRef,useEffect} from "react";
+import { themed } from '../../theme';
 import { Animated, StyleSheet, View } from "react-native";
 import { TitleImages } from '../../assets/images';
 import { fonts } from '../../assets/fonts';
@@ -25,12 +26,13 @@ const SplashScreen = () => {
     )
 }
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     container: {
         ...StyleSheet.absoluteFillObject,
         zIndex: 10,
         elevation: 30,
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -46,15 +48,18 @@ const styles = StyleSheet.create({
     brand: {
         fontFamily: fonts.circular.bold,
         fontSize: 6 * vh,
-        color: '#15222B',
+        color: c.text,
         marginTop: 3 * vh,
     },
     tagline: {
         fontFamily: fonts.Poppins.medium,
         fontSize: 1.6 * vh,
         letterSpacing: 4,
-        color: '#1458C4',
+        color: c.primary,
         marginTop: 0.5 * vh,
     },
 });
 export default SplashScreen
+
+// live light/dark styles (see src/theme)
+const styles = themed(makeStyles);

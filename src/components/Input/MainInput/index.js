@@ -1,4 +1,5 @@
 import React from 'react';
+import { themeColors } from '../../../theme';
 import { View,TextInput,Image } from 'react-native';
 import ThemeColors from '../../../utils/ThemeColors';
 import { icons } from '../../../assets/images';
@@ -28,19 +29,17 @@ class MainInput extends React.Component {
       },
     });
   };
-  renderEye = () => {     
-    let icon = icons.showPasswordGrey;
-    if (this.state.hideText) {
-      icon = icons.showPasswordGrey;
-    } else {
-      icon = icons.hidePasswordGrey;
-    }
+  renderEye = () => {
+    // state.hideText === true means the password is currently visible.
+    // The icon mirrors the current state: visible -> open eye, hidden -> closed eye
+    const icon = this.state.hideText ? icons.eye : icons.eyeOff;
 
     return (
       <IconButton
-        style={{marginLeft: 2 * vw}}
+        style={{marginLeft: 2 * vw, padding: 1 * vw}}
         onPress={this.toggleEye}
         icon={icon}
+        iconStyle={{height: 5 * vw, width: 5 * vw}}
       />
     );
   };
@@ -70,9 +69,9 @@ class MainInput extends React.Component {
         )}
         <TextInput
           placeholder="Text Field"
-          placeholderTextColor={ThemeColors.placeholderGrey}
+          placeholderTextColor={themeColors().placeholder}
           {...this.props}
-          selectionColor={ThemeColors.primary}
+          selectionColor={themeColors().primary}
           style={[styles.field, this.props.fieldStyle]}
           secureTextEntry={hideText}
           ref={(r) => (this.input = r)}

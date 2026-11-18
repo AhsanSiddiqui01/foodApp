@@ -1,12 +1,11 @@
-import { StyleSheet } from "react-native";
-
+import { themed } from '../../theme';
 import {vh} from './../../utils/Units'
-// import {Fonts} from '../../assets/fonts'
-export default style = StyleSheet.create({
+
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c) => ({
     text:{
         fontSize:2.5*vh,
-        // fontFamily:Fonts.BR,
-        
-        color:'#000'
+        color: c.text,
     }
 })
+export default themed(makeStyles);

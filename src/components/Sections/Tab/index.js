@@ -26,6 +26,15 @@ const getIcon = (routeName, isActive) => {
         ? tabIcons.OrdersActive
         : tabIcons.OrdersInactive;
     }
+    case 'SettingsStack': {
+      return isActive ? tabIcons.SettingsActive : tabIcons.SettingsInactive;
+    }
+    case 'UsersStack': {
+      return isActive ? tabIcons.UsersActive : tabIcons.UsersInactive;
+    }
+    case 'MenuManagerStack': {
+      return isActive ? tabIcons.MenuActive : tabIcons.MenuInactive;
+    }
     case 'TotalStack': {
       return isActive
         ? tabIcons.TotalActive

@@ -1,14 +1,15 @@
+import { themed } from '../../theme';
 import { vh, vw } from "../../utils/Units";
 import { fonts } from "../../assets/fonts";
 
 const { StyleSheet } = require("react-native");
 const { default: ThemeColors } = require("../../utils/ThemeColors");
 
-const BLUE = '#1458C4';
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
     screen: {
         flex: 1,
-        backgroundColor: '#F5F7FB',
+        backgroundColor: c.background,
     },
     listContent: {
         paddingTop: 2 * vh,
@@ -17,12 +18,12 @@ const styles = StyleSheet.create({
     hero: {
         width: 92 * vw,
         alignSelf: 'center',
-        backgroundColor: BLUE,
+        backgroundColor: c.primary,
         borderRadius: 20,
         padding: 5 * vw,
         marginBottom: 2.5 * vh,
         elevation: 6,
-        shadowColor: BLUE,
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.3,
         shadowRadius: 12,
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     heroLabel: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2.2 * vh,
-        color: 'white',
+        color: c.onPrimary,
     },
     heroDate: {
         fontFamily: fonts.Poppins.regular,
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     heroValue: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2.6 * vh,
-        color: 'white',
+        color: c.onPrimary,
     },
     heroStatLabel: {
         fontFamily: fonts.Poppins.regular,
@@ -67,12 +68,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: c.card,
         borderRadius: 16,
         padding: 3 * vw,
         marginBottom: 1.5 * vh,
         elevation: 2,
-        shadowColor: BLUE,
+        shadowColor: c.shadow,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     rank: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 1.6 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
         width: 6 * vw,
         textAlign: 'center',
     },
@@ -97,29 +98,29 @@ const styles = StyleSheet.create({
     dishName: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 1.8 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
     },
     dishPrice: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.4 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
     },
     barTrack: {
         height: 6,
         borderRadius: 3,
-        backgroundColor: '#EEF1F6',
+        backgroundColor: c.divider,
         marginTop: 0.8 * vh,
         overflow: 'hidden',
     },
     barFill: {
         height: 6,
         borderRadius: 3,
-        backgroundColor: ThemeColors.orderButton,
+        backgroundColor: c.accent,
     },
     dishQty: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2.6 * vh,
-        color: BLUE,
+        color: c.primary,
         minWidth: 12 * vw,
         textAlign: 'right',
     },
@@ -135,14 +136,14 @@ const styles = StyleSheet.create({
     emptyTitle: {
         fontFamily: fonts.Poppins.semiBold,
         fontSize: 2.2 * vh,
-        color: ThemeColors.backgroundBlack,
+        color: c.text,
         marginTop: 2 * vh,
     },
     emptyText: {
         fontFamily: fonts.Poppins.regular,
         fontSize: 1.7 * vh,
-        color: ThemeColors.fontLightGrey,
+        color: c.textMuted,
         marginTop: 0.5 * vh,
     },
 })
-export default styles;
+export default themed(makeStyles);

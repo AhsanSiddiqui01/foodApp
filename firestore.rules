@@ -1,6 +1,7 @@
 rules_version = '2';
 
 // Paste into Firebase console > Firestore Database > Rules, then Publish.
+// Roles (userProfiles.apcontrol): 0 = customer, 1 = admin (handles orders), 2 = owner (also manages menu & users).
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -8,54 +9,123 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function role() {
+      return get(/databases/$(database)/documents/userProfiles/$(request.auth.uid)).data.apcontrol;
+    }
+
+    // Blocked users keep their login but may not use the app
+    function notBlocked() {
+      return get(/databases/$(database)/documents/userProfiles/$(request.auth.uid)).data.get('blocked', false) != true;
+    }
+
+    // Ordering hours / days / pause set by the owner in the Settings tab (settings/app).
+    // Defaults (9:00-17:00, every day) apply until the owner saves them. Mirrors serviceSettings.js.
+    function serviceSettings() {
+      return exists(/databases/$(database)/documents/settings/app)
+        ? get(/databases/$(database)/documents/settings/app).data
+        : {};
+    }
+
+    // Orders are allowed only inside those hours in the customer's own time zone. request.time is
+    // Firebase's server clock, so changing the phone's clock doesn't help; tzOffset (minutes east
+    // of UTC) comes from the phone's time zone. 1 Jan 1970 was a Thursday (day 4, Sunday = 0).
+    function inOrderWindow() {
+      let settings = serviceSettings();
+      let tz = request.resource.data.get('tzOffset', 0);
+      let localTotal = math.floor(request.time.toMillis() / 60000) + tz;
+      // int(): rules arithmetic can yield a float here, and `in` won't match a float against the
+      // int day numbers in openDays (it raises an evaluation error and denies the order)
+      let localMinute = int(localTotal % 1440);
+      let weekday = int((math.floor(localTotal / 1440) + 4) % 7);
+      return tz is int && tz >= -720 && tz <= 840
+        && settings.get('paused', false) != true
+        && weekday in settings.get('openDays', [0, 1, 2, 3, 4, 5, 6])
+        && localMinute >= settings.get('openMinute', 540)
+        && localMinute < settings.get('closeMinute', 1020);
+    }
+
+    // Admin or owner: sees all orders and updates their status
+    function isStaff() {
+      return signedIn() && (role() == 1 || role() == 2);
+    }
+
+    // Owner: everything staff can do, plus managing the menu and users
     function isAdmin() {
-      return signedIn()
-        && get(/databases/$(database)/documents/userProfiles/$(request.auth.uid)).data.apcontrol == 1;
+      return signedIn() && role() == 2;
     }
 
-    // Role of each user (apcontrol: 1 = admin, 0 = user). Managed from the console only.
+    // Role / blocked flag of each user. Users read their own; the owner manages everyone else
+    // (never their own profile, so they can't lock themselves out).
     match /userProfiles/{uid} {
-      allow read: if signedIn() && request.auth.uid == uid;
-      allow write: if false;
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update, delete: if isAdmin() && request.auth.uid != uid;
     }
 
-    // Menu items. Managed from the console only.
+    // Each user's own preferences (e.g. light / dark theme); nobody else can read or change them
+    match /userPrefs/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    // App settings (ordering hours). Readable before sign-in so the login screen can show them;
+    // only the owner changes them.
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Menu items. Everyone signed in reads; only the admin changes them.
     match /foodList/{itemId} {
       allow read: if signedIn();
-      allow write: if false;
+      allow write: if isAdmin();
     }
 
-    // Add-ons (cold drinks, sides). Managed from the console only.
+    // Add-ons (cold drinks, sides). Everyone signed in reads; only the admin changes them.
     match /extras/{itemId} {
       allow read: if signedIn();
-      allow write: if false;
+      allow write: if isAdmin();
     }
 
-    // Orders: users place them, admin manages them.
+    // An admin (role 1) handles only the orders of customers the owner assigned to them
+    function isAssignedAdmin(order) {
+      return signedIn() && role() == 1 && order.get('adminId', null) == request.auth.uid;
+    }
+
+    // The customer's assigned admin, as set by the owner on their profile
+    function myAdminId() {
+      return get(/databases/$(database)/documents/userProfiles/$(request.auth.uid)).data.get('adminId', null);
+    }
+
+    // Orders: customers place them; their assigned admin and the owner manage them.
     match /orderList/{orderId} {
       allow read: if isAdmin()
+        || isAssignedAdmin(resource.data)
         || (signedIn() && resource.data.orderDetail.userId == request.auth.uid);
-      allow create: if signedIn()
-        && request.resource.data.orderDetail.userId == request.auth.uid;
-      allow update, delete: if isAdmin();
+      allow create: if signedIn() && notBlocked() && inOrderWindow()
+        && request.resource.data.orderDetail.userId == request.auth.uid
+        && request.resource.data.get('status', 'placed') == 'placed'
+        && request.resource.data.get('adminId', null) == myAdminId();
+      // A cancelled order is final: nobody can re-open or change it afterwards
+      allow update: if (isAdmin() || isAssignedAdmin(resource.data))
+        && resource.data.get('status', 'placed') != 'cancelled';
+      allow delete: if isAdmin() || isAssignedAdmin(resource.data);
     }
 
     // Login logs and FCM tokens written by the app.
     match /users/{docId} {
       allow create: if signedIn();
-      allow read: if isAdmin();
+      allow read: if isStaff();
     }
     match /adminLogin/{docId} {
-      allow create: if isAdmin();
-      allow read: if isAdmin();
+      allow create: if isStaff();
+      allow read: if isStaff();
     }
     match /userToken/{docId} {
       allow create: if signedIn();
-      allow read: if isAdmin();
+      allow read: if isStaff();
     }
+    // Staff device tokens (doc id = FCM token), for new-order notifications.
     match /adminToken/{docId} {
-      allow create: if isAdmin();
-      allow read: if signedIn();
+      allow read, write: if isStaff();
     }
   }
 }

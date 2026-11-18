@@ -5,25 +5,49 @@ import {vh, vw} from '../utils/Units';
 const styles = StyleSheet.create({
   defaultHeaderTitleStyle: {
     color: 'white',
-    fontFamily: fonts.circular.bold,
+    fontFamily: fonts.Poppins.semiBold,
     fontSize: 2.4 * vh,
-    paddingBottom: 1 * vh,
   },
   defaultHeaderTitleContainerStyle: {},
   defaultHeaderRightContainerStyle: {
-    paddingBottom: 1 * vh,
     paddingRight: 5 * vw,
   },
   defaultHeaderLeftContainerStyle: {
-    paddingBottom: 2 * vh,
     paddingLeft: 5 * vw,
   },
   deafultHeaderStyle: {
-    height: 11 * vh,
-    backgroundColor: 'transparent',
+    height: 8.5 * vh,
+    backgroundColor: '#1458C4',
     elevation: 0,
     shadowOpacity: 0,
-    // paddingBottom: 0 * vh,
+  },
+  headerBackground: {
+    flex: 1,
+  },
+  greeting: {
+    fontFamily: fonts.Poppins.semiBold,
+    fontSize: 2.2 * vh,
+    color: 'white',
+  },
+  statusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 0.2 * vh,
+  },
+  statusDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: '#4ADE80',
+    marginRight: 6,
+  },
+  statusDotClosed: {
+    backgroundColor: '#FF8A8A',
+  },
+  statusText: {
+    fontFamily: fonts.Poppins.regular,
+    fontSize: 1.5 * vh,
+    color: '#DCE8FB',
   },
   seachBarStyle: {
     top:40,

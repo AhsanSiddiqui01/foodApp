@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
+import { themed } from '../../../theme';
 import { Image, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import { showToast } from '../../../utils';
 import { connect } from 'react-redux';
 import actions from '../../../redux/actions';
 import { fonts } from '../../../assets/fonts';
 import { TitleImages } from '../../../assets/images';
+import { isStaff, isAdmin as isOwner, roleLabel, roleOption } from '../../../utils/roles';
+import LinearGradient from 'react-native-linear-gradient';
 
-const BLUE = '#1458C4';
-const RED = '#E5484D';
 
 // Header avatar (first letter of the user's name); tapping it opens a sign-out sheet
 class MenuButton extends Component {
@@ -23,8 +24,8 @@ class MenuButton extends Component {
       })
       }
     render(){
-        const isAdmin = this.props.apcontrol == 1
-        const name = this.props.name || (isAdmin ? 'Admin' : 'User')
+        const isAdmin = isStaff(this.props.apcontrol)
+        const name = this.props.name || (isAdmin ? roleLabel(this.props.apcontrol) : 'User')
         const initial = name.charAt(0).toUpperCase()
         return(
           <>
@@ -37,14 +38,16 @@ class MenuButton extends Component {
             <Text style={styles.avatarText}>{initial}</Text>
           </TouchableOpacity>
           {isAdmin
-            ? this.renderAdminSheet(name, initial)
+            ? this.renderAdminSheet(name, initial, roleLabel(this.props.apcontrol))
             : this.renderUserSheet(name)}
           </>
         )
     }
 
-    // Admin: centered card focused on incoming orders
-    renderAdminSheet(name, initial){
+    // Admin / owner: profile-style card with a gradient banner and the avatar overlapping it
+    renderAdminSheet(name, initial, role){
+        const option = roleOption(this.props.apcontrol)
+        const owner = isOwner(this.props.apcontrol)
         return(
           <Modal
             visible={this.state.visible}
@@ -55,27 +58,43 @@ class MenuButton extends Component {
             <TouchableWithoutFeedback onPress={this._close}>
               <View style={styles.overlay}>
                 <TouchableWithoutFeedback>
-                  <View style={styles.sheet}>
-                    <View style={styles.bigAvatar}>
-                      <Text style={styles.bigAvatarText}>{initial}</Text>
-                    </View>
-                    <Text style={styles.name}>{name}</Text>
-                    {name.toLowerCase() !== 'admin' && (
-                      <View style={[styles.rolePill, styles.rolePillAdmin]}>
-                        <Text style={[styles.roleText, styles.roleTextAdmin]}>Admin</Text>
+                  <View style={styles.staffCard}>
+                    <LinearGradient colors={['#2F7BEA', '#1458C4']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.banner}>
+                      <View style={[styles.bannerCircle, styles.bannerCircleOne]} />
+                      <View style={[styles.bannerCircle, styles.bannerCircleTwo]} />
+                    </LinearGradient>
+
+                    <View style={styles.staffAvatarRing}>
+                      <View style={[styles.staffAvatar, { backgroundColor: option.background }]}>
+                        <Text style={[styles.staffAvatarText, { color: option.color }]}>{initial}</Text>
                       </View>
-                    )}
-                    <Text style={styles.title}>Sign out of foody?</Text>
-                    <Text style={styles.message}>
-                      You won't see new orders until you sign in again.
-                    </Text>
-                    <View style={styles.buttonRow}>
-                      <TouchableOpacity style={[styles.button, styles.stayButton]} activeOpacity={0.8} onPress={this._close}>
-                        <Text style={[styles.buttonText, styles.stayText]}>Stay Signed In</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={[styles.button, styles.logoutButton]} activeOpacity={0.8} onPress={this._onLogout}>
-                        <Text style={styles.buttonText}>Log Out</Text>
-                      </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.staffBody}>
+                      <Text style={styles.name} numberOfLines={1}>{name}</Text>
+                      {name.toLowerCase() !== role.toLowerCase() && (
+                        <View style={[styles.rolePill, { backgroundColor: option.background }]}>
+                          <Text style={[styles.roleText, { color: option.color }]}>{role}</Text>
+                        </View>
+                      )}
+
+                      <View style={styles.divider} />
+
+                      <Text style={styles.staffTitle}>Sign out?</Text>
+                      <Text style={styles.message}>
+                        {owner
+                          ? 'You can sign back in anytime to manage the menu, users and orders.'
+                          : "You won't see new orders until you sign back in."}
+                      </Text>
+
+                      <View style={styles.buttonRow}>
+                        <TouchableOpacity style={[styles.button, styles.stayButton]} activeOpacity={0.8} onPress={this._close}>
+                          <Text style={[styles.buttonText, styles.stayText]}>Stay</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, styles.logoutButton]} activeOpacity={0.8} onPress={this._onLogout}>
+                          <Text style={styles.buttonText}>Sign Out</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
@@ -101,9 +120,9 @@ class MenuButton extends Component {
                   <View style={styles.bottomSheet}>
                     <View style={styles.handle}/>
                     <Image source={TitleImages.Logo} style={styles.illustration}/>
-                    <Text style={styles.userTitle}>Leaving already, {name}?</Text>
+                    <Text style={styles.userTitle}>Sign out?</Text>
                     <Text style={styles.message}>
-                      Today's menu is still waiting for you. Sign in again anytime to order your lunch.
+                      Are you sure you want to sign out? You'll need to sign in again to order lunch.
                     </Text>
                     {cartCount > 0 && (
                       <View style={styles.cartWarning}>
@@ -127,7 +146,8 @@ class MenuButton extends Component {
     }
 }
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
   avatar: {
     width: 38,
     height: 38,
@@ -141,18 +161,18 @@ const styles = StyleSheet.create({
   avatarText: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 16,
-    color: 'white',
+    color: c.onPrimary,
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(21,34,43,0.45)',
+    backgroundColor: c.overlay,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
   sheet: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: c.card,
     borderRadius: 24,
     paddingTop: 28,
     paddingBottom: 20,
@@ -160,13 +180,77 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 12,
   },
+  staffCard: {
+    width: '100%',
+    backgroundColor: c.card,
+    borderRadius: 24,
+    overflow: 'hidden',
+    elevation: 14,
+  },
+  banner: {
+    height: 92,
+    overflow: 'hidden',
+  },
+  bannerCircle: {
+    position: 'absolute',
+    borderRadius: 100,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+  },
+  bannerCircleOne: {
+    width: 140,
+    height: 140,
+    top: -60,
+    right: -30,
+  },
+  bannerCircleTwo: {
+    width: 90,
+    height: 90,
+    bottom: -45,
+    left: 24,
+  },
+  staffAvatarRing: {
+    alignSelf: 'center',
+    marginTop: -44,
+    padding: 4,
+    borderRadius: 48,
+    backgroundColor: c.card,
+    elevation: 4,
+  },
+  staffAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  staffAvatarText: {
+    fontFamily: fonts.Poppins.semiBold,
+    fontSize: 32,
+  },
+  staffBody: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  divider: {
+    alignSelf: 'stretch',
+    height: 1,
+    backgroundColor: c.divider,
+    marginTop: 18,
+  },
+  staffTitle: {
+    fontFamily: fonts.Poppins.semiBold,
+    fontSize: 17,
+    color: c.text,
+    marginTop: 16,
+  },
   bigAvatar: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#E8F0FD',
+    backgroundColor: c.primarySoft,
     borderWidth: 3,
-    borderColor: 'white',
+    borderColor: c.card,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,
@@ -174,42 +258,42 @@ const styles = StyleSheet.create({
   bigAvatarText: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 30,
-    color: BLUE,
+    color: c.primary,
   },
   name: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 18,
-    color: '#15222B',
+    color: c.text,
     marginTop: 12,
   },
   rolePill: {
-    backgroundColor: '#E7F6EC',
+    backgroundColor: c.successSoft,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 3,
     marginTop: 6,
   },
   rolePillAdmin: {
-    backgroundColor: '#FFF1EC',
+    backgroundColor: c.accentSoft,
   },
   roleText: {
     fontFamily: fonts.Poppins.medium,
     fontSize: 12,
-    color: '#2E9E5B',
+    color: c.success,
   },
   roleTextAdmin: {
-    color: '#F75938',
+    color: c.accent,
   },
   title: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 17,
-    color: '#15222B',
+    color: c.text,
     marginTop: 20,
   },
   message: {
     fontFamily: fonts.Poppins.regular,
     fontSize: 14,
-    color: '#666666',
+    color: c.textSecondary,
     textAlign: 'center',
     marginTop: 6,
     lineHeight: 20,
@@ -228,29 +312,29 @@ const styles = StyleSheet.create({
   },
   stayButton: {
     borderWidth: 1.5,
-    borderColor: BLUE,
+    borderColor: c.primary,
     marginRight: 10,
   },
   logoutButton: {
-    backgroundColor: RED,
+    backgroundColor: c.danger,
     marginLeft: 10,
     elevation: 3,
   },
   buttonText: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 15,
-    color: 'white',
+    color: c.onPrimary,
   },
   stayText: {
-    color: BLUE,
+    color: c.primary,
   },
   bottomOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(21,34,43,0.45)',
+    backgroundColor: c.overlay,
     justifyContent: 'flex-end',
   },
   bottomSheet: {
-    backgroundColor: 'white',
+    backgroundColor: c.card,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     paddingHorizontal: 24,
@@ -262,7 +346,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#E3E8F0',
+    backgroundColor: c.border,
     marginBottom: 16,
   },
   illustration: {
@@ -274,15 +358,15 @@ const styles = StyleSheet.create({
   userTitle: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 19,
-    color: '#15222B',
+    color: c.text,
     marginTop: 12,
     textAlign: 'center',
   },
   cartWarning: {
     width: '100%',
-    backgroundColor: '#FFF8E1',
+    backgroundColor: c.warningSoft,
     borderLeftWidth: 3,
-    borderLeftColor: '#F19C1C',
+    borderLeftColor: c.warning,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 14,
@@ -291,13 +375,13 @@ const styles = StyleSheet.create({
   cartWarningText: {
     fontFamily: fonts.Poppins.medium,
     fontSize: 13,
-    color: '#7A4A00',
+    color: c.warning,
   },
   keepButton: {
     width: '100%',
     height: 52,
     borderRadius: 14,
-    backgroundColor: BLUE,
+    backgroundColor: c.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 22,
@@ -311,7 +395,7 @@ const styles = StyleSheet.create({
   signOutText: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 15,
-    color: RED,
+    color: c.danger,
   },
 })
 
@@ -337,3 +421,6 @@ const mapStateToProps = state => {
 
 
 export default connect(mapStateToProps,mapDispatchToProps)(MenuButton)
+
+// live light/dark styles (see src/theme)
+const styles = themed(makeStyles);

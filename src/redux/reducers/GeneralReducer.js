@@ -112,10 +112,10 @@ case actionTypes.REMOVE_FROM_CART:
   }
 
 //checkout list
+// Placing an order only empties the cart; the signed-in user's role (apcontrol) must stay as is
 case actionTypes.CHECK_OUT:
     return{
         ...state,
-        apcontrol: action.payload.apcontrol,
         my_orders:[
             ...state.cart,
             ...state.my_orders

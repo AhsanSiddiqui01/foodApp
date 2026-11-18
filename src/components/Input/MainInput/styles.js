@@ -1,18 +1,20 @@
+import { themed } from '../../../theme';
 import {fonts} from '../../../assets/fonts';
 import ThemeColors from '../../../utils/ThemeColors';
 import { vh,vw } from '../../../utils/Units';
 
 const {StyleSheet} = require('react-native');
 
-const styles = StyleSheet.create({
+// Built per theme by useStyles / stylesFor (see src/theme)
+const makeStyles = (c, isDark) => ({
   fieldContainer: {
     // width: 80 * vw,
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#E3E8F0',
+    borderColor: c.border,
     alignItems: 'center',
 
-    backgroundColor: '#F5F7FB',
+    backgroundColor: c.background,
     paddingHorizontal: 4 * vw,
     borderRadius: 12,
     height: 6 * vh,
@@ -29,8 +31,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     margin: 0,
-    color: ThemeColors.fontBlack,
+    color: c.text,
     backgroundColor: 'transparent'
   },
 });
-export default styles;
+export default themed(makeStyles);

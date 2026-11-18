@@ -1,16 +1,18 @@
 import React, { useEffect,useState } from 'react';
+import { themeColors } from '../../theme';
 import { View, Text,Image,ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import styles from './styles'
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import firestore from '@react-native-firebase/firestore'
 import actionTypes from '../../redux/actions/ActionTypes';
-import { showToast, isOrderTimeOpen, ORDER_TIME_TEXT } from '../../utils';
+import { fetchExtras } from '../../utils/extras';
+import { showToast, isOrderTimeOpen } from '../../utils';
+import { closedMessage } from '../../utils/serviceSettings';
 import { connect } from 'react-redux';
 import { icons, getFoodImage } from '../../assets/images';
 
 const EXTRA_SECTIONS = [
-  { category: 'drink', title: 'Cold Drinks' },
+  { category: 'drink', title: 'Drinks' },
   { category: 'side', title: 'Add Sides' },
 ];
 
@@ -24,11 +26,7 @@ function ProductDetails(props) {
   const data = props.route.params.foodList;
 
   useEffect(()=>{
-    firestore().collection('extras').orderBy('order').get()
-      .then((snapshot) => {
-        setExtras(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
-      })
-      .catch((error) => console.log('extras error', error))
+    fetchExtras().then(setExtras)
   },[])
 
   const incNum = () => { if (QTY < 99) setNum(QTY + 1) };
@@ -55,7 +53,7 @@ function ProductDetails(props) {
 
   const addToCart = () => {
     if( !isOrderTimeOpen() ){
-      return showToast(`Orders are closed. Order between ${ORDER_TIME_TEXT}`);
+      return showToast(closedMessage());
     }
     addItemsToCart()
     showToast('Added to cart')
@@ -64,7 +62,7 @@ function ProductDetails(props) {
 
   const OrderRn = () => {
     if( !isOrderTimeOpen() ){
-      return showToast(`Orders are closed. Order between ${ORDER_TIME_TEXT}`);
+      return showToast(closedMessage());
     }
     addItemsToCart()
     navigation.navigate('MenuStack', { screen: 'MenuScreen' })
@@ -141,7 +139,7 @@ function ProductDetails(props) {
           <Text style={[styles.sectionTitle, styles.extrasTitle]}>Special Instructions</Text>
           <TextInput
             placeholder="e.g. less spicy, no onion"
-            placeholderTextColor="#9AA3B5"
+            placeholderTextColor={themeColors().placeholder}
             style={styles.moreDetail}
             value={notes}
             onChangeText={(text) => setNotes(text)}
