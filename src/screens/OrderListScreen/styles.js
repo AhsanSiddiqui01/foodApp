@@ -20,6 +20,8 @@ const makeStyles = (c, isDark) => ({
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    // room between the summary cards and the first order card
+    marginBottom: 2 * vh,
   },
   statCard: {
     width: 29 * vw,

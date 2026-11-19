@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
@@ -22,9 +22,14 @@ export default function UserOrderCart (props) {
   const total = items.reduce((sum, food) => sum + lineTotal(food), 0)
   const itemCount = items.reduce((sum, food) => sum + (Number(food.QTY) || 1), 0)
   const customer = item.userName || 'Customer'
-  const status = getStatus(item.status)
-  const next = nextStatus(item.status)
-  const cancelled = isCancelled(item.status)
+  // The step just saved from this card: shown at once, without waiting for the live list to
+  // send the order back. Dropped as soon as the list brings a newer status.
+  const [savedStatus, setSavedStatus] = useState(null)
+  useEffect(() => { setSavedStatus(null) }, [item.status])
+  const statusKey = savedStatus || item.status
+  const status = getStatus(statusKey)
+  const next = nextStatus(statusKey)
+  const cancelled = isCancelled(statusKey)
   const orderLabel = `#${item.id.slice(0, 6).toUpperCase()}`
 
   const advance = () => {
@@ -34,6 +39,7 @@ export default function UserOrderCart (props) {
     setUpdating(true)
     firestore().collection('orderList').doc(item.id)
       .update({ status: next.key, statusUpdatedAt: firestore.FieldValue.serverTimestamp() })
+      .then(() => setSavedStatus(next.key))
       .catch((error) => {
         console.log('status update error', error)
         showToast('Could not update the order. Please try again.')
@@ -45,6 +51,7 @@ export default function UserOrderCart (props) {
     setCancelling(true)
     cancelOrder(item.id, { reason, cancelledBy: myName })
       .then(() => {
+        setSavedStatus('cancelled')
         setCancelOpen(false)
         showToast(`Order ${orderLabel} cancelled`)
       })
@@ -103,9 +110,9 @@ export default function UserOrderCart (props) {
         <Text style={[styles.footerAmount, cancelled && styles.footerAmountCancelled]}>Rs {total}</Text>
       </View>
 
-      {(next || canCancel(item.status)) && (
+      {(next || canCancel(statusKey)) && (
         <View style={styles.actionRow}>
-          {canCancel(item.status) && (
+          {canCancel(statusKey) && (
             <TouchableOpacity
               style={styles.cancelBtn}
               activeOpacity={0.85}

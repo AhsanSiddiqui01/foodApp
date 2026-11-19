@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
   headerBackground: {
     flex: 1,
   },
+  // screen width - left/right header padding (5vw each) - theme button + avatar (~110)
+  brandContainer: {
+    width: 90 * vw - 110,
+  },
   greeting: {
     fontFamily: fonts.Poppins.semiBold,
     fontSize: 2.2 * vh,
@@ -45,6 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF8A8A',
   },
   statusText: {
+    flexShrink: 1,
     fontFamily: fonts.Poppins.regular,
     fontSize: 1.5 * vh,
     color: '#DCE8FB',

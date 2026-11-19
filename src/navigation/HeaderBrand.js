@@ -29,13 +29,14 @@ const HeaderBrand = () => {
   const firstName = (name || '').trim().split(' ')[0];
 
   return (
-    <View>
+    // width capped so the text stops before the theme + avatar buttons on the right
+    <View style={styles.brandContainer}>
       <Text style={styles.greeting} numberOfLines={1}>
         {greetingFor(now.getHours())}{firstName ? `, ${firstName}` : ''} 👋
       </Text>
       <View style={styles.statusRow}>
         <View style={[styles.statusDot, !open && styles.statusDotClosed]} />
-        <Text style={styles.statusText} numberOfLines={1}>
+        <Text style={styles.statusText} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8}>
           {statusLine(now, settings)}
         </Text>
       </View>

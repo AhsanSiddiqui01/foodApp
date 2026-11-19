@@ -283,7 +283,6 @@ function Cart(props) {
             onPress={placeOrder}
           >
             <Text style={styles.placeOrderText}>{placing ? 'Placing...' : 'Place Order'}</Text>
-            <Text style={styles.placeOrderAmount}>Rs {total}</Text>
           </TouchableOpacity>
         </View>
       }

@@ -221,6 +221,12 @@ android {
             include (*reactNativeArchitectures())
         }
     }
+    // Release key details live in android/keystore.properties (not in git)
+    def keystorePropsFile = rootProject.file("keystore.properties")
+    def keystoreProps = new Properties()
+    if (keystorePropsFile.exists()) {
+        keystorePropsFile.withInputStream { keystoreProps.load(it) }
+    }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -228,15 +234,22 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (keystoreProps['FOODY_UPLOAD_STORE_FILE']) {
+                storeFile file(keystoreProps['FOODY_UPLOAD_STORE_FILE'])
+                storePassword keystoreProps['FOODY_UPLOAD_STORE_PASSWORD']
+                keyAlias keystoreProps['FOODY_UPLOAD_KEY_ALIAS']
+                keyPassword keystoreProps['FOODY_UPLOAD_KEY_PASSWORD']
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // Signed with the Foody release key (android/app/foody-release.keystore)
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

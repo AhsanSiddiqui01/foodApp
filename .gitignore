@@ -63,3 +63,6 @@ buck-out/
 # Firebase service account keys (never commit)
 serviceAccountKey*.json
 *-firebase-adminsdk-*.json
+
+# Release signing secrets
+android/keystore.properties

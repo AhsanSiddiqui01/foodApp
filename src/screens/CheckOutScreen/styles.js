@@ -168,7 +168,7 @@ const makeStyles = (c, isDark) => ({
         alignSelf:'center',
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'center',
         paddingHorizontal: 6 * vw,
         backgroundColor: c.accent,
         borderRadius: 16,
